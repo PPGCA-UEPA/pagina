@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produção Científica — PPGCA/UEPA</title>
+<link rel="stylesheet" href="ppgca-base.css">
+<style>
+  /* ── Indicadores ── */
+  .indicadores { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-bottom: 40px; }
+  .ind-card { background: var(--branco); border: 1px solid var(--borda); border-radius: 12px; padding: 24px; text-align: center; }
+  .ind-card svg { width: 28px; height: 28px; stroke: var(--verde); fill: none; margin-bottom: 10px; }
+  .ind-card .n { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 900; color: var(--verde); line-height: 1; }
+  .ind-card .l { font-size: 12px; color: var(--cinza-medio); margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+  .ind-card .sub { font-size: 11px; color: var(--cinza-medio); margin-top: 2px; }
+
+  /* ── Aviso ── */
+  .aviso { background: #FEF3C7; border: 1px solid #FDE68A; border-radius: 10px; padding: 14px 20px;
+    margin-bottom: 32px; font-size: 13px; color: #92400E; display: flex; align-items: flex-start; gap: 10px; }
+  .aviso svg { width: 18px; height: 18px; stroke: #92400E; fill: none; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Tabs ── */
+  .tabs { display: flex; border-bottom: 2px solid var(--borda); margin-bottom: 24px; gap: 0; }
+  .tab-btn { padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--cinza-medio);
+    border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent;
+    margin-bottom: -2px; font-family: inherit; transition: color .2s; white-space: nowrap; }
+  .tab-btn.ativo { color: var(--verde); border-bottom-color: var(--verde); }
+  .tab-btn:hover { color: var(--verde-escuro); }
+  .tab-panel { display: none; }
+  .tab-panel.ativo { display: block; }
+
+  /* ── Cards de publicação ── */
+  .pub-card { display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--borda); }
+  .pub-card:last-child { border-bottom: none; }
+  .pub-card.oculto { display: none; }
+
+  .pub-icone { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .pub-icone svg { width: 20px; height: 20px; fill: none; }
+  .pub-icone-verde { background: var(--fundo-alt); } .pub-icone-verde svg { stroke: var(--verde); }
+  .pub-icone-roxo  { background: #EDE9FE; }          .pub-icone-roxo svg  { stroke: #7C3AED; }
+  .pub-icone-azul  { background: #DBEAFE; }          .pub-icone-azul svg  { stroke: #1D4ED8; }
+
+  .pub-corpo { flex: 1; min-width: 0; }
+  .pub-tipo-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--verde); margin-bottom: 4px; }
+  .pub-titulo { font-size: 15px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 5px; line-height: 1.4; }
+  .pub-autores { font-size: 13px; color: var(--cinza-medio); margin-bottom: 4px; line-height: 1.5; }
+  .pub-autores strong { color: var(--verde-escuro); font-weight: 600; }
+  .pub-ref { font-size: 12px; color: var(--cinza-medio); font-style: italic; margin-bottom: 8px; }
+  .pub-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .pub-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
+  .pub-badge.ano { background: var(--fundo-alt); color: var(--verde-escuro); }
+  .pub-badge.doc { background: #F3F4F6; color: #374151; }
+  .doc-btn { font-size: 11px; font-weight: 700; color: var(--verde); text-decoration: none;
+    border: 1px solid var(--verde-claro); padding: 2px 8px; border-radius: 4px; transition: background .15s; }
+  .doc-btn:hover { background: var(--fundo-alt); }
+
+  /* ── Sidebar ── */
+  .filtros-box { background: var(--branco); border: 1px solid var(--borda); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .filtros-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px;
+    color: var(--cinza-medio); margin-bottom: 10px; margin-top: 16px; }
+  .filtros-box h4:first-child { margin-top: 0; }
+  .filtros-box select { width: 100%; padding: 9px 12px; border: 1.5px solid var(--borda); border-radius: 7px;
+    font-size: 13px; font-family: inherit; color: var(--cinza-texto); outline: none; background: var(--branco);
+    transition: border-color .2s; cursor: pointer; }
+  .filtros-box select:focus { border-color: var(--verde); }
+  .filtros-box button { width: 100%; margin-top: 10px; justify-content: center; }
+
+  .status-box { background: var(--verde-escuro); border-radius: 12px; padding: 20px; color: #fff; margin-bottom: 20px; }
+  .status-box h4 { font-size: 12px; font-weight: 700; color: #9ed45c; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+  .status-linha { display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .status-linha:last-child { border-bottom: none; }
+  .status-linha .nome { color: rgba(255,255,255,.8); }
+  .status-linha .cnt { font-weight: 700; color: #9ed45c; }
+  .status-linha .pendente { color: rgba(255,255,255,.35); font-style: italic; font-size: 11px; }
+
+  .pub-contador { font-size: 13px; color: var(--cinza-medio); margin-bottom: 16px; }
+  .pub-contador strong { color: var(--cinza-texto); }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Home</a> › <span>Produção Científica</span></div>
+      <h1>Produção Científica</h1>
+      <p>Publicações do corpo docente do PPGCA — período 2025/2026.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="layout-sidebar-right">
+    <main>
+
+      <!-- AVISO -->
+      <div class="aviso">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div><strong>Base em construção.</strong> Esta página exibe as publicações de 2025/2026 de <strong>3 dos 17 docentes</strong> do PPGCA (Alfredo Homma, Ana Karina Moreyra e Norma Ely Santos Beltrão). Os demais currículos serão incorporados progressivamente. Os dados foram importados diretamente da Plataforma Lattes/CNPq.</div>
+      </div>
+
+      <!-- INDICADORES -->
+      <div class="indicadores">
+        <div class="ind-card">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div class="n">18</div>
+          <div class="l">Artigos</div>
+          <div class="sub">em periódicos</div>
+        </div>
+        <div class="ind-card">
+          <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          <div class="n">1</div>
+          <div class="l">Livros e capítulos</div>
+          <div class="sub">publicados</div>
+        </div>
+        <div class="ind-card">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <div class="n">19</div>
+          <div class="l">Trabalhos</div>
+          <div class="sub">em eventos</div>
+        </div>
+        <div class="ind-card">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          <div class="n">3 / 17</div>
+          <div class="l">Docentes</div>
+          <div class="sub">importados</div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs" id="artigos">
+        <button class="tab-btn ativo" onclick="mostrarTab('artigos',this)">
+          Artigos e Periódicos (18)
+        </button>
+        <button class="tab-btn" onclick="mostrarTab('dissertacoes',this)" id="btn-dissertacoes">
+          Dissertações e Teses (11)
+        </button>
+        <button class="tab-btn" onclick="mostrarTab('livros',this)" id="btn-livros">
+          Livros e Capítulos (1)
+        </button>
+        <button class="tab-btn" onclick="mostrarTab('eventos',this)">
+          Trabalhos em Eventos (19)
+        </button>
+      </div>
+
+      <!-- PAINEL DISSERTAÇÕES E TESES -->
+      <div class="tab-panel" id="panel-dissertacoes">
+        <div id="dissertacoes"></div>
+
+        <!-- MESTRADO -->
+        <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--verde-escuro);margin:0 0 16px;">
+          Dissertações de Mestrado
+        </h3>
+        <div id="lista-dissertacoes">
+
+          <div class="pub-card" data-tipo="dissertacao" data-docente="todos">
+            <div class="pub-icone pub-icone-verde">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="pub-corpo">
+              <div class="pub-tipo-label">Dissertação de Mestrado</div>
+              <div class="pub-titulo">Descarte de Resíduos Sólidos em Área Urbana: uma análise sobre as implicações socioambientais e legislativas no bairro do Tapanã, Belém/PA</div>
+              <div class="pub-autores"><strong>Bárbara Fabíola Freire Gomes</strong></div>
+              <div class="pub-ref">PPGCA/UEPA — Mestrado em Ciências Ambientais, 2026</div>
+              <div class="pub-meta">
+                <span class="pub-badge ano">2026</span>
+                <span class="pub-badge doc">Orientador: Prof. Dr. José Augusto Carvalho de Araújo</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-card" data-tipo="dissertacao" data-docente="todos">
+            <div class="pub-icone pub-icone-verde">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="pub-corpo">
+              <div class="pub-tipo-label">Dissertação de Mestrado</div>
+              <div class="pub-titulo">Planejamento Sustentável em Habitações de Interesse Social: Integração de fatores ambientais, econômicos e sociais em uma abordagem multidimensional</div>
+              <div class="pub-autores"><strong>Camila dos Santos Pantoja</strong></div>
+              <div class="pub-ref">PPGCA/UEPA — Mestrado em Ciências Ambientais, 2026</div>
+              <div class="pub-meta">
+                <span class="pub-badge ano">2026</span>
+                <span class="pub-badge doc">Orientador: Prof. Dr. Hélio Raymundo Ferreira Filho</span>
+                <span class="pub-badge doc">Coorientador: Prof. Dr. Igor de Jesus Lobato Pompeu Gammarano</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-card" data-tipo="dissertacao" data-docente="todos">
+            <div class="pub-icone pub-icone-verde">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="pub-corpo">
+              <div class="pub-tipo-label">Dissertação de Mestrado</div>
+              <div class="pub-titulo">Análise da Eficácia da Legislação Ambiental na Prevenção e Combate aos Crimes Ambientais na Amazônia Paraense</div>
+              <div class="pub-autores"><strong>John Maciel Barra</strong></div>
+              <div class="pub-ref">PPGCA/UEPA — Mestrado em Ciências Ambientais, 2026</div>
+              <div class="pub-meta">
+                <span class="pub-badge ano">2026</span>
+                <span class="pub-badge doc">Orientador: Prof. Dr. Manoel Tavares de Paula</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-card" data-tipo="dissertacao" data-docente="todos">
+            <div class="pub-icone pub-icone-verde">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="pub-corpo">
+              <div class="pub-tipo-label">Dissertação de Mestrado</div>
+              <div class="pub-titulo">Saúde da Mulher na Região Amazônica: desafios, determinantes e estratégias de cuidado em diferentes ciclos de vida</div>
+              <div class="pub-autores"><strong>Jessica Rayane Costa Pinheiro</strong></div>
+              <div class="pub-ref">PPGCA/UEPA — Mestrado em Ciências Ambientais, 2025</div>
+              <div class="pub-meta">
+                <span class="pub-badge ano">2025</span>
+                <span class="pub-badge doc">Orientador: Prof. Dr. Altem Nascimento Pontes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-card" data-tipo="dissertacao" data-docente="todos">
+            <div class="pub-icone pub-icone-verde">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="pub-corpo">
+              <div class="pub-tipo-label">Dissertação de Mestrado</div>
+              <div class="pub-titulo">Saúde e Meio Ambiente: arboviroses no contexto da saúde pública</div>
+              <div class="pub-autores"><strong>Monike Karina Macedo Soares</strong></div>
+              <div class="pub-ref">PPGCA/UEPA — Mestrado em Ciências Ambientais, 2025</div>
+              <div class="pub-meta">
+                <span class="pub-badge ano">2025</span>
+                <span class="pub-badge doc">Orientador: Prof. Dr. Altem Nascimento Pontes</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /lista-dissertacoes -->
+
+        <!-- DOUTORADO -->
+        <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--verde-escuro);margin:40px 0 16px;padding-top:32px;border-top:1px solid var(--borda);" id="teses">
+          Teses de Doutorado
+        </h3>
+        <div id="lista-teses">
+
+          <div class="pub-card" data-tipo="tese" data-docente="todos">
+            <div class="pub-icone pub-icone-roxo">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="pub-corpo">
+              <div class="pub-tipo-label" style="color:#7C3AED;">Tese de Doutorado</div>
+              <div class="pub-titulo">Tecnologia e Sustentabilidade da Pecuária Leiteira no Município de Itaituba, Pará</div>
+              <div class="pub-autores"><strong>Júlio Nonato Silva Nascimento</strong></div>
+              <div class="pub-ref">PPGCA/UEPA — Doutorado em Ciências Ambientais, 2024</div>
+              <div class="pub-meta">
+                <span class="pub-badge ano">2024</span>
+                <span class="pub-badge doc">Orientador: Prof. Dr. Alfredo Kingo Oyama Homma</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-card" data-tipo="tese" data-docente="todos">
+            <div class="pub-icone pub-icone-roxo">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="pub-corpo">
+              <div class="pub-tipo-label" style="color:#7C3AED;">Tese de Doutorado</div>
+              <div class="pub-titulo">Distribuição Espacial e Espaço-Temporal do Câncer de Pulmão e sua Relação com os Determinantes Sociais, Ambientais e Econômicos da Saúde</div>
+              <div class="pub-autores"><strong>Bruna Rafaela Leite Dias</strong></div>
+              <div class="pub-ref">PPGCA/UEPA — Doutorado em Ciências Ambientais, 2025</div>
+              <div class="pub-meta">
+                <span class="pub-badge ano">2025</span>
+                <span class="pub-badge doc">Orientador: Prof. Dr. Altem Nascimento Pontes</span>
+                <span class="pub-badge doc">Coorientadora: Profa. Dra. Laura Maria Vidal Nogueira</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-card" data-tipo="tese" data-docente="todos">
+            <div class="pub-icone pub-icone-roxo">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="pub-corpo">
+              <div class="pub-tipo-label" style="color:#7C3AED;">Tese de Doutorado</div>
+              <div class="pub-titulo">Qualidade da Água para Higienização das Mãos no Serviço Hospitalar de Urgência e Emergência</div>
+              <div class="pub-autores"><strong>Gleyce Pinto Girard</strong></div>
+              <div class="pub-ref">PPGCA/UEPA — Doutorado em Ciências Ambientais, 2025</div>
+              <div class="pub-meta">
+                <span class="pub-badge ano">2025</span>
+                <span class="pub-badge doc">Orientadora: Profa. Dra. Hebe Morganne Campos Ribeiro</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-card" data-tipo="tese" data-docente="todos">
+            <div class="pub-icone pub-icone-roxo">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="pub-corpo">
+              <div class="pub-tipo-label" style="color:#7C3AED;">Tese de Doutorado</div>
+              <div class="pub-titulo">Educação Ambiental em Unidades de Conservação da Natureza Estadual na Amazônia Marajoara: Avanços, Conflitos e Possibilidades de Gestão</div>
+              <div class="pub-autores"><strong>Alzira Almeida de Araujo</strong></div>
+              <div class="pub-ref">PPGCA/UEPA — Doutorado em Ciências Ambientais, 2026</div>
+              <div class="pub-meta">
+                <span class="pub-badge ano">2026</span>
+                <span class="pub-badge doc">Orientador: Prof. Dr. Altem Nascimento Pontes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-card" data-tipo="tese" data-docente="todos">
+            <div class="pub-icone pub-icone-roxo">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="pub-corpo">
+              <div class="pub-tipo-label" style="color:#7C3AED;">Tese de Doutorado</div>
+              <div class="pub-titulo">Serviços Ecossistêmicos na Bacia Hidrográfica do Rio Caeté: Dinâmica Hidroclimática, Oferta e Valoração sob Cenários de Mudança de Uso e Cobertura do Solo</div>
+              <div class="pub-autores"><strong>Dênis José Cardoso Gomes</strong></div>
+              <div class="pub-ref">PPGCA/UEPA — Doutorado em Ciências Ambientais, 2026</div>
+              <div class="pub-meta">
+                <span class="pub-badge ano">2026</span>
+                <span class="pub-badge doc">Orientadora: Profa. Dra. Norma Ely Santos Beltrão</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /lista-teses -->
+      </div><!-- /panel-dissertacoes -->
+
+      <!-- PAINEL ARTIGOS -->
+      <div class="tab-panel ativo" id="panel-artigos">
+        <div class="pub-contador">Exibindo <strong id="cnt-artigos">18</strong> artigos</div>
+        <div id="lista-artigos">
+        <div class="pub-card" data-tipo="artigo" data-docente="alfredo_kingo_oyama_homma">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">The Conservation-Development Paradox in Brazilian Amazon Extractive Reserves: A 35-Year Systematic Review</div>
+            <div class="pub-autores">Freitas, J. D. S.; Florentino, G. D.; Galdino, L. K. A.; Farias Filho, M. C.; Rodrigues, M.; Gois, G. D.; <strong>Homma, A. K. O.</strong>; Rivas, A. A. F.; Maia, R. D. R. P.; Silva, D. C. C.; Santos, K. M. D.</div>
+            <div class="pub-ref">Sustainability, v. 18, p. 4224, 2026</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2026</span>
+              <span class="pub-badge doc">Alfredo Kingo Oyama Homma</span>
+              <a href="https://doi.org/10.3390/su18094224" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="alfredo_kingo_oyama_homma">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">Análise da Cadeia Produtiva do Jambu (Acmella oleracea (L.) R.K. Jansen) na Região Metropolitana de Belém (RMB/PA)</div>
+            <div class="pub-autores">Ferreira, A. O.; <strong>Homma, A. K. O.</strong></div>
+            <div class="pub-ref">REVISTA ORBIS LATINA, v. 15, p. 342–364, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Alfredo Kingo Oyama Homma</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">COAGULATION AND FLOCCULATION PROCESSES IN WATER TREATMENT: CHOOSING THE CATALYST WITH THE BEST COST-BENEFIT RATIO</div>
+            <div class="pub-autores">Júnior, A. P.; Morales, G. P.; <strong>Beltrão, N. E. S.</strong>; Rodrigues, A. B.; Giuliatti, N. M.; Recoliano, M. C. S.; Martins, M. E. M.; Moreira, A. C. S.</div>
+            <div class="pub-ref">FOCO (FACULDADE NOVO MILÊNIO), v. 18, p. e7658, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.54751/revistafoco.v18n2-026" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">Changes in Land Use and Land Cover in Parauapebas (Pa): A Study On The Municipal Seat and its Urban Expansion Zone (2000-2022)</div>
+            <div class="pub-autores">Mendes, A. D. S.; <strong>Beltrão, N. E. S.</strong>; Nascimento, N. C.</div>
+            <div class="pub-ref">RGSA (ANPAD), v. 19, p. e013906, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.24857/rgsa.v19n11-072" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">DETECTION OF POSSIBLE POLLUTING MICROPLASTICS IN THE PARAGOMINAS STREAM, MUNICIPALITY OF THE SAME NAME, PARÁ, BRAZIL</div>
+            <div class="pub-autores">Júnior, A. P.; Morales, G. P.; <strong>Beltrão, N. E. S.</strong>; Costa, G. M. M.; Recoliano, M. C. S.; Martins, M. E. M.; Moreira, A. C. S.; De Almeida, P. F.</div>
+            <div class="pub-ref">ARACÊ - DIREITOS HUMANOS EM REVISTA, v. 7, p. 11435–11459, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.56238/arev7n3-077" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">Environmental Aspects of Soybean Expansion in the Municipality of Santana do Araguaia, Southeastern Pará, Eastern Amazon</div>
+            <div class="pub-autores">Sadeck, C. C. D. A.; Ferreira Filho, H. R.; <strong>Beltrão, N. E. S.</strong></div>
+            <div class="pub-ref">RGSA (ANPAD), v. 19, p. e012855, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.24857/rgsa.v19n7-053" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">First bathymetric studies of the Paragominas stream, urban stretch, in the municipality of the same name, Pará, Brazil</div>
+            <div class="pub-autores">Pereira Júnior, A.; Morales, G. P.; <strong>Beltrão, N. E. S.</strong></div>
+            <div class="pub-ref">DELOS: DESARROLLO LOCAL SOSTENIBLE, v. 18, p. e3596, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.55905/rdelosv18.n63-085" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">GIS-Based Flood Susceptibility Mapping Using AHP in the Urban Amazon: A Case Study of Ananindeua, Brazil</div>
+            <div class="pub-autores">Pimenta, L.; Duarte, L.; Teodoro, A. C.; <strong>Beltrão, N.</strong>; Gomes, D.; Oliveira, R.</div>
+            <div class="pub-ref">LAND, v. 14, p. 1543, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.3390/land14081543" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">MAPEAMENTO DE ÁREAS DE RISCO DE INUNDAÇÃO NA SEDE DO MUNICÍPIO DE ALTAMIRA-PA</div>
+            <div class="pub-autores">Anderson E. Araújo; Ferreira, J. F. H.; Cavalcante, J. C.; <strong>Moreyra, A. K.</strong></div>
+            <div class="pub-ref">Ravista Geonorte, v. 16, p. 98–129, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              <a href="https://doi.org/10.21170/geonorte.2025.V.16.N.55.98.129" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="alfredo_kingo_oyama_homma">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">Mercado brasileiro de fertilizantes e corretivos para recuperação de pastagens degradadas no estado do Pará</div>
+            <div class="pub-autores">Caitano, T. B. S.; <strong>Homma, A. K. O.</strong></div>
+            <div class="pub-ref">COLÓQUIO - REVISTA DO DESENVOLVIMENTO REGIONAL, v. 2, p. 274–274, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Alfredo Kingo Oyama Homma</span>
+              <a href="https://doi.org/10.26767/coloquio.222025.3719" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">Monitoring the 2023 Amazon River drought using the WRI index in the Lower Amazon region, Pará, Brazil</div>
+            <div class="pub-autores">Brito, C. S. D. S.; <strong>Beltrão, N. E. S.</strong>; Rodrigues, M. T. T.; Furtado, I. V.; Assunção, S. P. d.</div>
+            <div class="pub-ref">CONTRIBUCIONES A LAS CIENCIAS SOCIALES, v. 18, p. e23156, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.55905/revconv.18n.12-331" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">O desmatamento na Amazônia legal (2008 a 2023): Principais agentes agravantes</div>
+            <div class="pub-autores">Araujo, A. E.; <strong>Moreyra, A. K.</strong></div>
+            <div class="pub-ref">REVISTA GEOAMAZÔNIA, v. 13, p. 147–167, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              <a href="https://doi.org/10.18542/geo.v12i25.17725" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">PRIMEIRO ESTUDO SOBRE A AMÔNIA (NH3) CONTIDA NO CÓRREGO PARAGOMINAS NO MUNICÍPIO DE MESMO NOME, SUDESTE DO PARÁ</div>
+            <div class="pub-autores">Pereira Júnior, A.; Morales, G. P.; <strong>Beltrão, N. E. S.</strong>; Barbosa, A. J. S. D. S.; Gutierrez, L. A. C. L.; Jesus, E. D. S.; Ribeiro, H. M. C.; Recoliano, M. C. S.; Martins, M. E. M.</div>
+            <div class="pub-ref">ARACÊ - DIREITOS HUMANOS EM REVISTA, v. 7, p. 15660–15685, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.56238/arev7n4-006" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">PROTOCOLO DE COLETA PARA INVENTÁRIO DE INSETOS AQUÁTICOS NA AMAZÔNIA NO SISTEMA RAPELD COM ÊNFASE EM EPHEMEROPTERA, PLECOPTERA, TRICHOPTERA, ODONATA E HETEROPTERA</div>
+            <div class="pub-autores">Juen, L.; Shimano, Y.; Faria, A. P. J.; Cruz, P. V.; Quinteiro, F. B.; Brasil, L. S.; Santos, E. M.; Veras, D. S.; Sousa, J. R. P.; Nascimento, J. M. C.; Ligeiro, R.; Santos-Silva, F.; <strong>Moreyra, K.</strong>; Barbosa-Santos, F. M.; Luz-Silva, B.; Rivera-Perez, J. M.; Oliveira-Junior, J. M. B.; Luiza-Andrade, A.; Santos, L. B. C.; Resende, B. O.; Et.Al</div>
+            <div class="pub-ref">Revista EDUCAmazônia - Educação, Sociedade e Meio Ambiente, v. 18, p. 473–515, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">Performance Of Random Forest and Cart Algorithms In Land-Use and Land-Cover Classification on Cotijuba Island (Pa) From 1989 To 2023</div>
+            <div class="pub-autores">Brito, C. S. D. S.; <strong>Beltrão, N. E. S.</strong>; Pimenta, L. B.; Jesus, N. C. C. D.</div>
+            <div class="pub-ref">RGSA (ANPAD), v. 19, p. e014093, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.24857/rgsa.v19n12-048" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">Preliminary analysis of water quality in the urban stretch of Paragominas stream, Pará, Brazil</div>
+            <div class="pub-autores">Pereira Júnior, A.; Morales, G. P.; <strong>Beltrão, N. E. S.</strong></div>
+            <div class="pub-ref">CADERNO PEDAGÓGICO (LAJEADO. ONLINE), v. 22, p. e13831, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.54033/cadpedv22n4-001" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">Prioritisation of Studies In Sustainable Urban Mobility Via Fuzzy-Topsis: A Methodological Approach For Systematic Reviews</div>
+            <div class="pub-autores">Pereira, A. T.; Lago, J. D. S.; Santos, Y. B. I.; Veloso, B. M. D.; <strong>Beltrão, N. E. S.</strong></div>
+            <div class="pub-ref">RGSA (ANPAD), v. 19, p. e011568, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.24857/rgsa.v19n3-032" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="artigo" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-verde"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Artigo em periódico</div>
+            <div class="pub-titulo">Serviços Ecossistêmicos na Floresta Amazônica: Análise Sistemática, Lacunas de Pesquisa e Implicações para a Sustentabilidade</div>
+            <div class="pub-autores">Santos, L. B.; <strong>Santos Beltrão, N. E.</strong>; Souza De Oliveira, R. R.</div>
+            <div class="pub-ref">REVISTA BRASILEIRA DE GEOGRAFIA FÍSICA, v. 18, p. 4799–4824, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              <a href="https://doi.org/10.26848/rbgf.v18.6.p4799-4824" target="_blank" class="doc-btn">DOI ↗</a>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- PAINEL LIVROS -->
+      <div class="tab-panel" id="panel-livros">
+        <div class="pub-contador">Exibindo <strong id="cnt-livros">1</strong> publicação(ões)</div>
+        <div id="lista-livros">
+        <div class="pub-card" data-tipo="livro" data-docente="alfredo_kingo_oyama_homma">
+          <div class="pub-icone pub-icone-roxo"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Livro</div>
+            <div class="pub-titulo">Bacuri: extrativismo, manejo e plantio</div>
+            <div class="pub-autores"><strong>Homma, A. K. O.</strong>; Menezes, A.; Pontes, A. N.</div>
+            <div class="pub-ref">EDUEPA, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Alfredo Kingo Oyama Homma</span>
+              
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- PAINEL EVENTOS -->
+      <div class="tab-panel" id="panel-eventos">
+        <div class="pub-contador">Exibindo <strong id="cnt-eventos">19</strong> trabalhos</div>
+        <div id="lista-eventos">
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">ATIVIDADES DE RECREAÇÃO E LAZER EM IGARAPÉS DO MUNICÍPIO DE AVEIRO-PA: AVALIAÇÃO DA QUALIDADE AMBIENTAL</div>
+            <div class="pub-autores">Pereira, W. K. S.; Santiago, L. M.; Santos, C. E. S.; Rocha, A. C.; <strong>Moreyra, A. K.</strong></div>
+            <div class="pub-ref">XIV Simpósio de Estudos e Pesquisas em Ciências Ambientais na Amazônia, 2026</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2026</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">O PAPEL DO BIOMONITORAMENTO NA AVALIAÇÃO DE IMPACTOS DE ATIVIDADES ANTRÓPICAS EM ECOSSISTEMAS AQUÁTICOS ESTUARINOS NA AMAZÔNIA: DESAFIOS, PERSPECTIVAS E EXPERIÊNCIAS BEM-SUCEDIDAS</div>
+            <div class="pub-autores">Bitencourt, E. B. E.; Lopes, D. F.; Soares, L. C. R.; Lima, G. L. O. G.; Cabral, M. V. A.; <strong>Moreyra, A. K.</strong></div>
+            <div class="pub-ref">XIV Simpósio de Estudos e Pesquisas em Ciências Ambientais na Amazônia, 2026</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2026</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">A CONTRIBUIÇÃO DA AGRICULTURA FAMILIAR PARA A SEGURANÇA ALIMENTAR NA AMAZÔNIA DE 2020 A 2024: AVANÇOS E DESAFIOS NOS SISTEMAS AGROALIMENTARES</div>
+            <div class="pub-autores">Alves, W. O.; Batista, V. G. S.; Fraga, H. V.; Fernandes, M. A. P.; <strong>Moreyra, A.</strong></div>
+            <div class="pub-ref">XV Jornada Acadêmica da UEPA - Campus Altamira, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">A ESTABILIDADE DAS VARIÁVEIS CLIMÁTICAS EM ÁREAS DE EXPANSÃO DO CULTIVO DE SOJA NO SUDESTE DO PARÁ (2012-2022)</div>
+            <div class="pub-autores">Sadeck, C. C. A.; Gomes, D. J. C.; Beltrao, N. E. S.; Ferreira Filho, H. R.</div>
+            <div class="pub-ref">XXI SIMPóSIO BRASILEIRO DE SENSORIAMENTO REMOTO, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">AVALIAÇÃO DO MANEJO E PERCEPÇÃO DOS RISCOS ASSOCIADOS A RESÍDUOS ESCARIFICANTES PELOS TRABALHADORES DA COLETA PÚBLICA NO MUNICÍPIO DE ALTAMIRA, PARÁ</div>
+            <div class="pub-autores">Araujo, J. H. R.; Pantoja Junior, M. V.; Sousa, A. K. P.; <strong>Moreyra, A. K.</strong></div>
+            <div class="pub-ref">Seminário de Integração Científica da Universidade do Estado do Pará, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">CONTRIBUIÇÃO DA PRECIPITAÇÃO E DA URBANIZAÇÃO PARA RISCOS DE ALAGAMENTOS: ANANINDEUA, PARÁ, BRASIL</div>
+            <div class="pub-autores">Pimenta, L. B.; Duarte, L.; Teodoro, A. C. M.; Beltrao, N. E. S.; Gomes, D. J. C.; Oliveira, R. M. E. S.</div>
+            <div class="pub-ref">XXI SIMPóSIO BRASILEIRO DE SENSORIAMENTO REMOTO, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">DESMATAMENTO DA AMAZÔNIA LEGAL (2008 A 2023): ESTADO DO PARÁ E MUNICÍPIO DE ALTAMIRA-PA COMO PRINCIPAIS PROTAGONISTAS.</div>
+            <div class="pub-autores">Araujo, A. E.; <strong>Moreyra, A. K.</strong></div>
+            <div class="pub-ref">XIII Simpósio de Estudos e Pesquisas em Ciências Ambientais na Amazônia - Belém, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">DESMATAMENTO E DEGRADAÇÃO FLORESTAL EM RITMO ACELERADO: AVALIAÇÃO DO NDFI NA TERRA INDÍGENA ITUNA/ITATÁ (2019 E 2020)</div>
+            <div class="pub-autores">Santos, L. B.; Beltrao, N. E. S.; Oliveira, R. R. S.</div>
+            <div class="pub-ref">XXI SIMPóSIO BRASILEIRO DE SENSORIAMENTO REMOTO, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">DETECÇÃO DA DEGRADAÇÃO FLORESTAL E DESMATAMENTO NA TERRA INDÍGENA AMANAYÉ UTILIZANDO NDFI NO GOOGLE EARTH ENGINE</div>
+            <div class="pub-autores">Santos, L. B.; Beltrao, N. E. S.</div>
+            <div class="pub-ref">XXI SIMPóSIO BRASILEIRO DE SENSORIAMENTO REMOTO, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">ESTADO ATUAL DOS SISTEMAS AGROFLORESTAIS NA REGIÃO DO TAPAJÓS</div>
+            <div class="pub-autores">Lima, A. L.; Pereira, W. K. S.; Santos, C. E. S.; Nascimento, E. R. B.; Porto, A. T. M.; <strong>Moreyra, A.</strong></div>
+            <div class="pub-ref">XV Jornada Acadêmica da UEPA - Campus Altamira, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">INTEGRAÇÃO DE DADOS MULTISSENSORES PARA ESTIMATIVA DE BIOMASSA ACIMA DO SOLO NA AMAZÔNIA: UMA ABORDAGEM RANDOM FOREST</div>
+            <div class="pub-autores">Noronha, F. N. S.; Beltrao, N. E. S.</div>
+            <div class="pub-ref">XXI SIMPóSIO BRASILEIRO DE SENSORIAMENTO REMOTO, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">MAPEAMENTO DE MANCHAS DE SUSCETIBILIDADE À INUNDAÇÃO NO BAIRRO MUTIRÃO EM ALTAMIRA-PA</div>
+            <div class="pub-autores">Anderson E. Araújo; Ferreira, J. F. H.; Cavalcante, J. C.; <strong>Moreyra, A.</strong></div>
+            <div class="pub-ref">XV Jornada Acadêmica da UEPA - Campus Altamira, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">MAPEAMENTO DOS AMBIENTES AQUÁTICOS UTILIZADOS COMO ÁREAS DE RECREAÇÃO NO MUNICÍPIO DE AVEIRO-PA</div>
+            <div class="pub-autores">Pereira, W. K. S.; Santiago, L. M.; Santos, C. E. S.; Rocha, A. C.; <strong>Moreyra, A.</strong></div>
+            <div class="pub-ref">XV Jornada Acadêmica da UEPA - Campus Altamira, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="norma_ely_santos_beltrao">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">MONITORAMENTO ESPACIAL DA MINERAÇÃO NA AMAZÔNIA: UMA ANÁLISE MULTITEMPORAL DE TRÊS DÉCADAS EM ITAITUBA, PARÁ</div>
+            <div class="pub-autores">Noronha, F. N. S.; Beltrao, N. E. S.</div>
+            <div class="pub-ref">XXI SIMPóSIO BRASILEIRO DE SENSORIAMENTO REMOTO, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Norma Ely Santos Beltrão</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">Métrica NDCA (Número de Áreas Centrais Disjuntas) como preditora de fragmentação do Habitat de Espécies da Ordem Odonata (Zygoptera e Anisoptera) em igarapés da Volta Grande do Xingu</div>
+            <div class="pub-autores">Cavalcante, J. C.; Costa, I. S.; <strong>Moreyra, A. K.</strong>; Adami, M.; Dias-Silva, K.</div>
+            <div class="pub-ref">VII Symposium on Neotropical Aquatic Insects, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="alfredo_kingo_oyama_homma">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">PERFIL SOCIOECONÔMICO DOS PEQUENOS PRODUTORES DE MURUCIZEIRO [Byrsonima crassifolia (L.) HBK] NA MESORREGIÃO NORDESTE PARAENSE, PARÁ</div>
+            <div class="pub-autores">Menezes, A. J. E. A. D.; <strong>Homma, A.</strong>; Matos, G. B. D.</div>
+            <div class="pub-ref">63º Congresso da SOBER, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Alfredo Kingo Oyama Homma</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">Relação de métricas de paisagem com a riqueza e abundância das formas imaturas de Odonata (Zygoptera e Anisoptera) em igarapés da Volta Grande do Xingu-PA</div>
+            <div class="pub-autores">Costa, L. P.; Cavalcante, J. C.; Dias-Silva, K.; <strong>Moreyra, A. K.</strong></div>
+            <div class="pub-ref">VII Symposium on Neotropical Aquatic Insects, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="ana_karina_moreyra">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">Riqueza de táxons de macroinvertebrados aquáticos em igarapés da Região de Volta Grande do Xingu- PA</div>
+            <div class="pub-autores">Costa, L. P.; Souza, D. A.; Dias-Silva, K.; <strong>Moreyra, K.</strong></div>
+            <div class="pub-ref">VII Symposium on Neotropical Aquatic Insects, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Ana Karina Moreyra</span>
+              
+            </div>
+          </div>
+        </div>
+        <div class="pub-card" data-tipo="evento" data-docente="alfredo_kingo_oyama_homma">
+          <div class="pub-icone pub-icone-azul"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div>
+          <div class="pub-corpo">
+            <div class="pub-tipo-label">Trabalho em evento</div>
+            <div class="pub-titulo">Transformações Produtivas e o Papel das Cooperativas na Cadeia Produtiva do Açaí no Estado do Amapá</div>
+            <div class="pub-autores">Chelala, C. M. D. S. C. F.; Carvalho, A. C. A. D.; Cardoso, H. R. M.; <strong>Homma, A. K. O.</strong></div>
+            <div class="pub-ref">63º Congresso da SOBER, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-badge ano">2025</span>
+              <span class="pub-badge doc">Alfredo Kingo Oyama Homma</span>
+              
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside>
+
+      <!-- FILTRO POR DOCENTE -->
+      <div class="filtros-box">
+        <h4>Filtrar por docente</h4>
+        <select id="sel-docente" onchange="filtrar()">
+          <option value="todos">Todos os docentes</option>
+          <option value="alfredo_kingo_oyama_homma">Alfredo Kingo Oyama Homma</option>
+<option value="ana_karina_moreyra">Ana Karina Moreyra</option>
+<option value="norma_ely_santos_beltrao">Norma Ely Santos Beltrão</option>
+        </select>
+
+        <h4>Filtrar por ano</h4>
+        <select id="sel-ano" onchange="filtrar()">
+          <option value="todos">2025 e 2026</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+
+        <button class="btn btn-outline btn-sm" onclick="limparFiltros()">Limpar filtros</button>
+      </div>
+
+      <!-- STATUS DE IMPORTAÇÃO -->
+      <div class="status-box">
+        <h4>Status de importação</h4>
+        <div class="status-linha">
+          <span class="nome">Alfredo Homma</span>
+          <span class="cnt">6 pub.</span>
+        </div>
+        <div class="status-linha">
+          <span class="nome">Ana Karina Moreyra</span>
+          <span class="cnt">14 pub.</span>
+        </div>
+        <div class="status-linha">
+          <span class="nome">Norma Ely Beltrão</span>
+          <span class="cnt">18 pub.</span>
+        </div>
+        <div class="status-linha">
+          <span class="nome" style="opacity:.5">14 docentes restantes</span>
+          <span class="pendente">aguardando XML</span>
+        </div>
+      </div>
+
+      <!-- LINKS -->
+      <div class="filtros-box">
+        <h4>Links externos</h4>
+        <ul style="list-style:none;">
+          <li style="padding:6px 0;border-bottom:1px solid var(--borda);">
+            <a href="https://sucupira.capes.gov.br" target="_blank" style="font-size:13px;color:var(--verde);text-decoration:none;">Plataforma Sucupira ↗</a>
+          </li>
+          <li style="padding:6px 0;border-bottom:1px solid var(--borda);">
+            <a href="https://lattes.cnpq.br" target="_blank" style="font-size:13px;color:var(--verde);text-decoration:none;">Plataforma Lattes ↗</a>
+          </li>
+          <li style="padding:6px 0;">
+            <a href="https://scholar.google.com" target="_blank" style="font-size:13px;color:var(--verde);text-decoration:none;">Google Scholar ↗</a>
+          </li>
+        </ul>
+        <p style="font-size:12px;color:var(--cinza-medio);margin-top:12px;">Para incluir seu currículo: exporte o XML no Lattes e envie à coordenação.</p>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script>const PAGINA_ATIVA = 'producao';</script>
+<script src="ppgca-components.js"></script>
+<script>
+  // ── Tabs ──
+  function mostrarTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('ativo'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
+    document.getElementById('panel-' + id).classList.add('ativo');
+    if (btn) btn.classList.add('ativo');
+    filtrar();
+  }
+
+  // Abrir tab correta ao clicar em link de menu (âncoras #artigos, #dissertacoes, #livros)
+  function abrirTabPorAncora() {
+    const hash = window.location.hash;
+    if (hash === '#dissertacoes') {
+      mostrarTab('dissertacoes', document.getElementById('btn-dissertacoes'));
+    } else if (hash === '#livros') {
+      mostrarTab('livros', document.getElementById('btn-livros'));
+    }
+  }
+  window.addEventListener('hashchange', abrirTabPorAncora);
+  abrirTabPorAncora();
+
+  // ── Filtro por docente + ano ──
+  function filtrar() {
+    const docSel = document.getElementById('sel-docente').value;
+    const anoSel = document.getElementById('sel-ano').value;
+
+    ['artigos','livros','eventos'].forEach(tipo => {
+      const lista = document.getElementById('lista-' + tipo);
+      if (!lista) return;
+      let visiveis = 0;
+      lista.querySelectorAll('.pub-card').forEach(card => {
+        const docMatch = docSel === 'todos' || card.dataset.docente === docSel;
+        const anoMatch = anoSel === 'todos' || card.querySelector('.pub-badge.ano')?.textContent.trim() === anoSel;
+        const mostrar  = docMatch && anoMatch;
+        card.classList.toggle('oculto', !mostrar);
+        if (mostrar) visiveis++;
+      });
+      const cnt = document.getElementById('cnt-' + tipo);
+      if (cnt) cnt.textContent = visiveis;
+    });
+  }
+
+  function limparFiltros() {
+    document.getElementById('sel-docente').value = 'todos';
+    document.getElementById('sel-ano').value     = 'todos';
+    filtrar();
+  }
+</script>
+</body>
+</html>

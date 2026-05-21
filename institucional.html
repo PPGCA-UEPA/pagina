@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Institucional — PPGCA/UEPA</title>
+<link rel="stylesheet" href="ppgca-base.css">
+<style>
+  .valores-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 32px; }
+  .valor-item { text-align: center; padding: 20px 12px; background: var(--fundo-alt); border-radius: 10px; border: 1px solid var(--borda); }
+  .valor-item svg { width: 32px; height: 32px; stroke: var(--verde); fill: none; margin-bottom: 10px; }
+  .valor-item h4 { font-size: 14px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 4px; }
+  .valor-item p { font-size: 12px; color: var(--cinza-medio); line-height: 1.4; }
+
+  .diferenciais-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 24px; }
+  .diferencial { display: flex; gap: 16px; padding: 20px; background: var(--fundo-alt); border-radius: 10px; border-left: 4px solid var(--verde); }
+  .diferencial svg { width: 28px; height: 28px; stroke: var(--verde); fill: none; flex-shrink: 0; margin-top: 2px; }
+  .diferencial h4 { font-size: 14px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 4px; }
+  .diferencial p { font-size: 13px; color: var(--cinza-medio); line-height: 1.5; }
+
+  .missao-visao { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+  .mv-box { padding: 28px; border-radius: 12px; }
+  .mv-box.missao { background: var(--verde-escuro); color: #fff; }
+  .mv-box.visao { background: var(--fundo-alt); border: 1px solid var(--borda); }
+  .mv-box h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+  .mv-box.missao h3 { color: #9ed45c; }
+  .mv-box.visao h3 { color: var(--verde-escuro); }
+  .mv-box p { font-size: 14px; line-height: 1.8; }
+  .mv-box.missao p { color: rgba(255,255,255,.85); }
+  .mv-box.visao p { color: var(--cinza-medio); }
+
+  .gestao-card { display: flex; gap: 16px; padding: 20px; background: var(--branco); border: 1px solid var(--borda); border-radius: 10px; margin-bottom: 12px; }
+  .gestao-avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--fundo-alt); border: 2px solid var(--verde-claro); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .gestao-avatar svg { width: 30px; height: 30px; stroke: var(--verde); fill: none; }
+  .gestao-info h4 { font-size: 15px; font-weight: 700; color: var(--verde-escuro); }
+  .gestao-info .cargo { font-size: 12px; color: var(--cinza-medio); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .5px; }
+  .gestao-info p { font-size: 13px; color: var(--cinza-medio); }
+  .gestao-info a { font-size: 13px; color: var(--verde); text-decoration: none; }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1600&q=80');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Home</a> › <span>Institucional</span></div>
+      <h1>Institucional</h1>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:13px;color:rgba(255,255,255,.65);">Conceito CAPES</div>
+      <div style="font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:#9ed45c;line-height:1;">5</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.55);">Área de Ciências Ambientais</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEÚDO -->
+<div class="container">
+  <div class="layout-sidebar">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <div class="sidebar-nav-title">Navegação</div>
+        <a href="#apresentacao" class="ativo">Apresentação ›</a>
+        <a href="#historico">Histórico</a>
+        <a href="#missao">Missão, Visão e Valores</a>
+        <a href="#coordenacao">Coordenação e Gestão</a>
+        <a href="#regimento">Regimento e Normas</a>
+        <a href="#calendario">Calendário Acadêmico</a>
+        <a href="#transparencia">Transparência</a>
+      </nav>
+
+      <div class="destaque-lateral">
+        <h4>Destaques</h4>
+        <div class="destaque-lateral-item">
+          <div class="destaque-lateral-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+          <div>
+            <h5>Excelência Acadêmica</h5>
+            <p>Conceito 5 na avaliação CAPES — Área de Ciências Ambientais</p>
+          </div>
+        </div>
+        <div class="destaque-lateral-item">
+          <div class="destaque-lateral-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div>
+            <h5>Desde 2010</h5>
+            <p>Mestrado aprovado na 122ª Reunião do CTC/CAPES</p>
+          </div>
+        </div>
+        <div class="destaque-lateral-item">
+          <div class="destaque-lateral-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <div>
+            <h5>Integração e Diversidade</h5>
+            <p>Colaboração com instituições nacionais e internacionais</p>
+          </div>
+        </div>
+        <div class="destaque-lateral-item">
+          <div class="destaque-lateral-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div>
+            <h5>Impacto e Transformação</h5>
+            <p>Ciência comprometida com a sociedade amazônica</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+
+      <!-- APRESENTAÇÃO -->
+      <section id="apresentacao">
+        <h2 class="content-title">Apresentação</h2>
+        <div class="content-title-line"></div>
+        <div class="content-text">
+          <p>O Programa de Pós-Graduação em Ciências Ambientais (PPGCA) da Universidade do Estado do Pará (UEPA) tem como missão formar <strong>pesquisadores e profissionais de excelência</strong>, com postura crítica, ética e interdisciplinar, capazes de produzir conhecimento científico robusto sobre os ecossistemas amazônicos e as dinâmicas socioambientais, contribuindo de forma efetiva para o <strong>desenvolvimento sustentável da região</strong> e para a solução de problemas socioambientais prioritários.</p>
+          <p>Criado e consolidado na <strong>multidisciplinaridade e na integração de saberes</strong>, o PPGCA desenvolve pesquisas e ações voltadas à conservação da biodiversidade, ao uso sustentável dos recursos naturais e à melhoria da qualidade de vida das populações amazônicas, sempre com forte <strong>compromisso com a sustentabilidade e a justiça socioambiental</strong>.</p>
+          <p>O programa oferece mestrado e doutorado acadêmicos e foi avaliado com <strong>nota 5 (excelência)</strong> pela CAPES na última avaliação quadrienal. Integra oficialmente a <strong>Área de Ciências Ambientais da CAPES</strong> e está abrigado no Centro de Ciências Naturais e Tecnologia (CCNT) da UEPA. O mestrado foi aprovado em 2010 e o doutorado implantado em 2021.</p>
+          <p>Conta com <strong>16 professores permanentes e 1 colaborador</strong>, que atuam em pesquisas de alto impacto na Amazônia. Anualmente, são ofertadas <strong>23 disciplinas</strong> entre obrigatórias e eletivas, promovendo a convergência entre diferentes formações acadêmicas.</p>
+          <p>Destina-se a portadores de diploma de graduação em qualquer área do conhecimento — é justamente da convergência entre formações distintas que a interdisciplinaridade gera seu conhecimento mais potente em ciência, tecnologia e inovação.</p>
+        </div>
+
+        <div class="stats-row" style="margin-top: 32px;">
+          <div class="stat-box"><div class="n">5</div><div class="l">Conceito CAPES</div></div>
+          <div class="stat-box"><div class="n">2010</div><div class="l">Ano de criação</div></div>
+          <div class="stat-box"><div class="n">2</div><div class="l">Linhas de pesquisa</div></div>
+          <div class="stat-box"><div class="n">23</div><div class="l">Disciplinas oferecidas</div></div>
+          <div class="stat-box"><div class="n">17</div><div class="l">Professores</div></div>
+        </div>
+      </section>
+
+      <!-- HISTÓRICO -->
+      <section id="historico" style="margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--borda);">
+        <h2 class="content-title">Histórico</h2>
+        <div class="content-title-line"></div>
+        <div class="content-text">
+          <p>O PPGCA nasceu da necessidade de fortalecer a formação científica e a produção de conhecimento sobre os ecossistemas amazônicos a partir de uma universidade estadual comprometida com o desenvolvimento regional sustentável. Desde sua criação, o programa tem consolidado sua identidade pela <strong>interdisciplinaridade efetiva</strong> entre as ciências naturais, sociais, exatas e humanas.</p>
+          <p>Com a implantação do <strong>Doutorado Acadêmico</strong>, o PPGCA amplia sua atuação como polo formador e produtor de ciência ambiental, com área de concentração em <em>Ambiente e Sustentabilidade na Amazônia Brasileira</em>.</p>
+        </div>
+      </section>
+
+      <!-- MISSÃO, VISÃO E VALORES -->
+      <section id="missao" style="margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--borda);">
+        <h2 class="content-title">Missão, Visão e Valores</h2>
+        <div class="content-title-line"></div>
+
+        <div class="missao-visao">
+          <div class="mv-box missao">
+            <h3>Missão</h3>
+            <p>Formar pesquisadores e profissionais de excelência, com postura crítica, ética e interdisciplinar, capazes de produzir conhecimento científico robusto sobre os ecossistemas amazônicos e as dinâmicas socioambientais, contribuindo de forma efetiva para o desenvolvimento sustentável da região e para a solução de problemas socioambientais prioritários.</p>
+          </div>
+          <div class="mv-box visao">
+            <h3>Visão de Futuro</h3>
+            <p>Tornar-se, até 2030, uma referência nacional e internacional em ciência ambiental interdisciplinar com foco na Amazônia, reconhecida pela qualidade e relevância de sua produção científica, pelo impacto social e ambiental de suas pesquisas e pela formação de lideranças acadêmicas e profissionais altamente qualificadas e comprometidas com a sustentabilidade da região e do planeta.</p>
+          </div>
+        </div>
+
+        <h3 class="content-title" style="font-size:22px; margin-top: 32px; margin-bottom: 6px;">Valores</h3>
+        <div class="valores-grid">
+          <div class="valor-item">
+            <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+            <h4>Excelência</h4>
+            <p>Produção científica relevante e rigorosa</p>
+          </div>
+          <div class="valor-item">
+            <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            <h4>Compromisso</h4>
+            <p>Ciência a serviço da sociedade</p>
+          </div>
+          <div class="valor-item">
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 6v6l4 2"/></svg>
+            <h4>Sustentabilidade</h4>
+            <p>Promoção do uso sustentável</p>
+          </div>
+          <div class="valor-item">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            <h4>Integração</h4>
+            <p>Diálogo entre ciência, saberes e território</p>
+          </div>
+          <div class="valor-item">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            <h4>Ética</h4>
+            <p>Responsabilidade e ética na pesquisa</p>
+          </div>
+        </div>
+
+        <h3 class="content-title" style="font-size:22px; margin-top:40px; margin-bottom:6px;">Diferenciais</h3>
+        <div class="diferenciais-grid">
+          <div class="diferencial">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>
+              <h4>Localização estratégica</h4>
+              <p>Programa instalado no coração da Amazônia, com acesso direto aos ecossistemas de estudo.</p>
+            </div>
+          </div>
+          <div class="diferencial">
+            <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+            <div>
+              <h4>Parceria com o IDEFLOR-Bio e SEMAS</h4>
+              <p>Infraestrutura laboratorial e de campo ampliada por meio de convênio institucional.</p>
+            </div>
+          </div>
+          <div class="diferencial">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <div>
+              <h4>Eventos científicos próprios</h4>
+              <p>Simpósio, Escola de Verão, Escola de Inverno e Seminários mensais de pós-graduação.</p>
+            </div>
+          </div>
+          <div class="diferencial">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            <div>
+              <h4>Interdisciplinaridade efetiva</h4>
+              <p>Docentes das ciências naturais, exatas, sociais e humanas atuando de forma integrada.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COORDENAÇÃO -->
+      <section id="coordenacao" style="margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--borda);">
+        <h2 class="content-title">Coordenação e Gestão</h2>
+        <div class="content-title-line"></div>
+
+        <div class="gestao-card">
+          <div class="gestao-avatar">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="gestao-info">
+            <div class="cargo">Coordenadora</div>
+            <h4>Profa. Dra. Norma Ely Santos Beltrão</h4>
+            <p>Mandato: 2026–2028</p>
+            <a href="mailto:ppgca@uepa.br">ppgca@uepa.br</a>
+          </div>
+        </div>
+        <div class="gestao-card">
+          <div class="gestao-avatar">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="gestao-info">
+            <div class="cargo">Vice-Coordenador</div>
+            <h4>Prof. Dr. Carlos Elias Braga</h4>
+            <p>Mandato: 2026–2028</p>
+            <a href="mailto:ppgca@uepa.br">ppgca@uepa.br</a>
+          </div>
+        </div>
+        <div class="gestao-card">
+          <div class="gestao-avatar">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="gestao-info">
+            <div class="cargo">Secretário(a)</div>
+            <h4>Lionete Castanho</h4>
+            <p>Horário: Segunda a sexta, 08h às 13h</p>
+            <a href="mailto:secppgca@uepa.br">secppgca@uepa.br</a>
+          </div>
+        </div>
+        <div class="gestao-card">
+          <div class="gestao-avatar">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="gestao-info">
+            <div class="cargo">Secretário(a)</div>
+            <h4>Sérgio Carlos</h4>
+            <p>Horário: Segunda a sexta, 13h às 18h</p>
+            <a href="mailto:secppgca@uepa.br">secppgca@uepa.br</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- REGIMENTO -->
+      <section id="regimento" style="margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--borda);">
+        <h2 class="content-title">Regimento e Normas</h2>
+        <div class="content-title-line"></div>
+        <style>
+          .reg-item { border: 1px solid var(--borda); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+          .reg-btn {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 20px; background: var(--fundo-alt); border: none; cursor: pointer;
+            font-size: 14px; font-weight: 700; color: var(--verde-escuro); font-family: inherit;
+            text-align: left; gap: 12px;
+          }
+          .reg-btn:hover { background: var(--verde-claro); }
+          .reg-btn svg.icon-doc { width: 20px; height: 20px; stroke: var(--verde); fill: none; flex-shrink: 0; }
+          .reg-btn .reg-chevron { font-size: 18px; color: var(--verde); transition: transform .2s; flex-shrink: 0; }
+          .reg-btn.aberto .reg-chevron { transform: rotate(45deg); }
+          .reg-sub { display: none; padding: 8px 12px 12px; background: var(--branco); }
+          .reg-sub.aberto { display: block; }
+          .reg-sub-link {
+            display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+            border-radius: 6px; text-decoration: none; color: var(--cinza-texto);
+            transition: background .15s; border-bottom: 1px solid var(--borda);
+          }
+          .reg-sub-link:last-child { border-bottom: none; }
+          .reg-sub-link:hover { background: var(--fundo-alt); }
+          .reg-sub-link svg { width: 16px; height: 16px; stroke: var(--verde); fill: none; flex-shrink: 0; }
+          .reg-sub-link .nome { flex: 1; font-size: 13px; }
+          .reg-sub-link .baixar { font-size: 11px; font-weight: 700; color: var(--verde); white-space: nowrap; }
+        </style>
+
+        <div class="reg-item">
+          <button class="reg-btn" onclick="toggleReg(this)">
+            <svg class="icon-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="flex:1">Regimento Interno do PPGCA</span>
+            <span class="reg-chevron">+</span>
+          </button>
+          <div class="reg-sub">
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Regimento Interno — Versão vigente</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Resolução de aprovação do Regimento</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="reg-item">
+          <button class="reg-btn" onclick="toggleReg(this)">
+            <svg class="icon-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="flex:1">Normas para Dissertação e Tese</span>
+            <span class="reg-chevron">+</span>
+          </button>
+          <div class="reg-sub">
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Normas para elaboração de dissertações</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Normas para elaboração de teses</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Modelo de capa e folha de rosto</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="reg-item">
+          <button class="reg-btn" onclick="toggleReg(this)">
+            <svg class="icon-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="flex:1">Normas para Qualificação e Defesa</span>
+            <span class="reg-chevron">+</span>
+          </button>
+          <div class="reg-sub">
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Normas para o exame de qualificação</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Normas e procedimentos de defesa</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Formulários e requerimentos</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="reg-item">
+          <button class="reg-btn" onclick="toggleReg(this)">
+            <svg class="icon-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="flex:1">Legislação CAPES — Área de Ciências Ambientais</span>
+            <span class="reg-chevron">+</span>
+          </button>
+          <div class="reg-sub">
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Portaria CAPES — Área de Ciências Ambientais</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Ficha de avaliação quadrienal CAPES</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+            <a href="#" class="reg-sub-link">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="nome">Documento de Área — Ciências Ambientais</span>
+              <span class="baixar">PDF ↓</span>
+            </a>
+          </div>
+        </div>
+
+        <script>
+          function toggleReg(btn) {
+            const sub = btn.nextElementSibling;
+            const isOpen = btn.classList.contains('aberto');
+            document.querySelectorAll('.reg-btn').forEach(b => { b.classList.remove('aberto'); b.nextElementSibling.classList.remove('aberto'); });
+            if (!isOpen) { btn.classList.add('aberto'); sub.classList.add('aberto'); }
+          }
+        </script>
+      </section>
+
+      <!-- CALENDÁRIO -->
+      <section id="calendario" style="margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--borda);">
+        <h2 class="content-title">Calendário Acadêmico 2026</h2>
+        <div class="content-title-line"></div>
+        <p style="font-size:14px;color:var(--cinza-medio);margin-bottom:20px;">O calendário acadêmico completo com todas as datas, prazos e atividades do programa está disponível para download em PDF.</p>
+        <div>
+          <a href="#" class="btn btn-outline btn-sm">↓ Baixar Calendário Completo (PDF)</a>
+        </div>
+      </section>
+
+      <!-- TRANSPARÊNCIA -->
+      <section id="transparencia" style="margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--borda);">
+        <h2 class="content-title">Transparência e Relatórios</h2>
+        <div class="content-title-line"></div>
+        <div class="cards-grid-3">
+          <a href="#" class="card" style="text-decoration:none;padding:24px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--verde)" stroke-width="1.8" style="margin-bottom:12px;"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+            <h3 style="font-size:15px;color:var(--verde-escuro);margin-bottom:6px;">Relatório de Autoavaliação CAPES</h3>
+            <p style="font-size:13px;color:var(--cinza-medio);">Relatório quadrienal e anual disponível para consulta.</p>
+          </a>
+          <a href="#" class="card" style="text-decoration:none;padding:24px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--verde)" stroke-width="1.8" style="margin-bottom:12px;"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <h3 style="font-size:15px;color:var(--verde-escuro);margin-bottom:6px;">Relatórios Sucupira</h3>
+            <p style="font-size:13px;color:var(--cinza-medio);">Dados anuais enviados à Plataforma Sucupira/CAPES.</p>
+          </a>
+          <a href="#" class="card" style="text-decoration:none;padding:24px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--verde)" stroke-width="1.8" style="margin-bottom:12px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <h3 style="font-size:15px;color:var(--verde-escuro);margin-bottom:6px;">Planejamento Estratégico</h3>
+            <p style="font-size:13px;color:var(--cinza-medio);">Metas e ações do programa para o quadriênio.</p>
+          </a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script>const PAGINA_ATIVA = 'institucional';</script>
+<script src="ppgca-components.js"></script>
+</body>
+</html>

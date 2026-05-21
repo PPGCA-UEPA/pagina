@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corpo Docente — PPGCA/UEPA</title>
+<link rel="stylesheet" href="ppgca-base.css">
+<style>
+  .filtros-lateral { background: var(--branco); border: 1px solid var(--borda); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+  .filtros-lateral h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--cinza-medio); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .filtros-lateral select, .filtros-lateral input {
+    width: 100%; padding: 9px 12px; border: 1.5px solid var(--borda); border-radius: 7px;
+    font-size: 13px; font-family: inherit; color: var(--cinza-texto); outline: none;
+    transition: border-color .2s; background: var(--branco); margin-bottom: 10px;
+  }
+  .filtros-lateral select:focus, .filtros-lateral input:focus { border-color: var(--verde); }
+  .checkbox-group label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--cinza-texto); margin-bottom: 8px; cursor: pointer; }
+  .checkbox-group input[type=checkbox] { accent-color: var(--verde); width: 15px; height: 15px; }
+
+  .docentes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .docentes-count { font-size: 15px; color: var(--cinza-medio); }
+  .docentes-count strong { color: var(--cinza-texto); }
+  .ordenar-select { padding: 8px 12px; border: 1.5px solid var(--borda); border-radius: 7px; font-size: 13px; font-family: inherit; outline: none; }
+
+  .docentes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  .docente-card {
+    display: flex; gap: 16px; padding: 20px;
+    background: var(--branco); border: 1px solid var(--borda); border-radius: 12px;
+    transition: box-shadow .2s, border-color .2s;
+  }
+  .docente-card:hover { box-shadow: var(--sombra); border-color: var(--verde-claro); }
+
+  /* Foto / avatar — pronto para receber foto real */
+  .docente-foto {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--fundo-alt); border: 2px solid var(--verde-claro);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; flex-shrink: 0; position: relative;
+  }
+  .docente-foto img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: none; /* Mude para display:block quando adicionar a foto */
+  }
+  .docente-foto svg { width: 34px; height: 34px; stroke: var(--verde); fill: none; opacity: .45; }
+
+  .docente-info { flex: 1; min-width: 0; }
+  .docente-vinculo {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .8px;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 4px; margin-bottom: 6px;
+  }
+  .vinculo-permanente { background: var(--verde-claro); color: var(--verde-escuro); }
+  .vinculo-colaborador { background: #DBEAFE; color: #1E40AF; }
+
+  .docente-info h3 { font-size: 14px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 3px; line-height: 1.35; }
+  .docente-info .area { font-size: 12px; color: var(--cinza-medio); margin-bottom: 10px; line-height: 1.45; }
+
+  .docente-links { display: flex; gap: 6px; flex-wrap: wrap; }
+  .doc-link {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 600; color: var(--verde); text-decoration: none;
+    padding: 3px 8px; border: 1px solid var(--verde-claro); border-radius: 4px;
+    transition: background .15s;
+  }
+  .doc-link:hover { background: var(--fundo-alt); }
+  .doc-link.email { color: var(--cinza-medio); border-color: var(--borda); font-weight: 400; }
+  .doc-link.email:hover { color: var(--verde); border-color: var(--verde-claro); background: var(--fundo-alt); }
+
+  .nota-fotos {
+    font-size: 12px; color: var(--cinza-medio); margin-top: 24px; text-align: center;
+    padding: 12px 16px; background: var(--fundo-alt); border-radius: 8px;
+    border: 1px dashed var(--borda);
+  }
+  .nota-fotos code { background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 11px; color: var(--verde-escuro); }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1474631245212-32dc3c8310c6?w=1600&q=80');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Home</a> › <a href="#">Pessoas</a> › <span>Corpo Docente</span></div>
+      <h1>Corpo Docente</h1>
+    </div>
+    <div style="max-width:320px;text-align:right;">
+      <p style="font-size:14px;color:rgba(255,255,255,.8);">Conheça o corpo docente do PPGCA, formado por pesquisadores comprometidos com a excelência acadêmica e a ciência a serviço da Amazônia.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="layout-sidebar" style="align-items:start;">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="filtros-lateral">
+        <h4>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          Categoria
+        </h4>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="chk-todos" checked onchange="filtrarCategoria()"> Todos</label>
+          <label><input type="checkbox" id="chk-permanente" onchange="filtrarCategoria()"> Docente Permanente</label>
+          <label><input type="checkbox" id="chk-colaborador" onchange="filtrarCategoria()"> Docente Colaborador</label>
+        </div>
+      </div>
+
+      <div class="filtros-lateral">
+        <h4>Busca por nome</h4>
+        <input type="search" id="busca-nome" placeholder="Digite o nome...">
+      </div>
+
+      <div class="sidebar-card">
+        <h4>Em números</h4>
+        <ul>
+          <li style="font-size:13px;color:var(--cinza-medio);padding:7px 0;border-bottom:1px solid var(--borda);display:flex;justify-content:space-between;">
+            Permanentes <strong style="color:var(--verde-escuro);">16</strong>
+          </li>
+          <li style="font-size:13px;color:var(--cinza-medio);padding:7px 0;display:flex;justify-content:space-between;">
+            Colaboradores <strong style="color:var(--verde-escuro);">1</strong>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+      <div class="docentes-header">
+        <div class="docentes-count"><strong id="total-count">17</strong> docentes</div>
+        <select class="ordenar-select" onchange="ordenarDocentes(this.value)">
+          <option value="nome">Ordenar: Nome (A–Z)</option>
+          <option value="categoria">Ordenar: Categoria</option>
+        </select>
+      </div>
+
+      <div class="docentes-grid" id="docentes-grid">
+
+        <!-- ── DOCENTE 1 ── -->
+        <div class="docente-card" data-nome="alcindo da silva martins junior" data-categoria="colaborador">
+          <div class="docente-foto">
+            <img src="fotos/alcindo.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-colaborador">Colaborador</span>
+            <h3>Prof. Dr. Alcindo da Silva Martins Junior</h3>
+            <div class="area">Biodiversidade Microbiana e de Plantas Avasculares em Florestas Tropicais</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:alcindo@uepa.br" class="doc-link email">alcindo@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 2 ── -->
+        <div class="docente-card" data-nome="alfredo kingo oyama homma" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/alfredo.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Prof. Dr. Alfredo Kingo Oyama Homma</h3>
+            <div class="area">Desenvolvimento Agrícola, Economia Extrativa e Política Ambiental na Amazônia</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:alfredo.homma@gmail.com" class="doc-link email">alfredo.homma@gmail.com</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 3 ── -->
+        <div class="docente-card" data-nome="altem nascimento pontes" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/altem.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Prof. Dr. Altem Nascimento Pontes</h3>
+            <div class="area">Educação Ambiental, Sustentabilidade e Metodologia Científica</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:altem.pontes@uepa.br" class="doc-link email">altem.pontes@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 4 ── -->
+        <div class="docente-card" data-nome="ana cláudia caldeira tavares martins" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/ana-claudia.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Profa. Dra. Ana Cláudia Caldeira Tavares Martins</h3>
+            <div class="area">Monitoramento e Conservação Ambiental</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:ana.martins@uepa.br" class="doc-link email">ana.martins@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 5 ── -->
+        <div class="docente-card" data-nome="ana karina moreyra" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/ana-karina.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Profa. Dra. Ana Karina Moreyra</h3>
+            <div class="area">Biomonitoramento e Saúde Ambiental de Ecossistemas Aquáticos Amazônicos</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:karina.moreyra@uepa.br" class="doc-link email">karina.moreyra@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 6 ── -->
+        <div class="docente-card" data-nome="ana lúcia nunes gutjahr" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/ana-lucia.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Profa. Dra. Ana Lúcia Nunes Gutjahr</h3>
+            <div class="area">Zoologia, Biodiversidade e Práticas de Campo em Ciências Ambientais</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:algutjahr@uepa.br" class="doc-link email">algutjahr@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 7 ── -->
+        <div class="docente-card" data-nome="carlos elias de souza braga" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/carlos.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Prof. Dr. Carlos Elias de Souza Braga</h3>
+            <div class="area">Mudanças Climáticas, Biodiversidade e Modelagem Ambiental</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:carlosbraga@uepa.br" class="doc-link email">carlosbraga@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 8 ── -->
+        <div class="docente-card" data-nome="cléa nazaré carneiro bichara" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/clea.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Profa. Dra. Cléa Nazaré Carneiro Bichara</h3>
+            <div class="area">Epidemiologia e Controle de Doenças Tropicais na Amazônia</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:clea.bichara@uepa.br" class="doc-link email">clea.bichara@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 9 ── -->
+        <div class="docente-card" data-nome="flávia cristina araújo lucas" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/flavia.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Profa. Dra. Flávia Cristina Araújo Lucas</h3>
+            <div class="area">Socioeconomia dos Ecossistemas, Biodiversidade e Sociedades Amazônicas</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:flavia.lucas@uepa.br" class="doc-link email">flavia.lucas@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 10 ── -->
+        <div class="docente-card" data-nome="gundisalvo piratoba morales" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/gundisalvo.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Prof. Dr. Gundisalvo Piratoba Morales</h3>
+            <div class="area">Análise e Avaliação de Impactos Ambientais</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:gundymorales@gmail.com" class="doc-link email">gundymorales@gmail.com</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 11 ── -->
+        <div class="docente-card" data-nome="hebe morganne campos ribeiro" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/hebe.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Profa. Dra. Hebe Morganne Campos Ribeiro</h3>
+            <div class="area">Qualidade, Manejo e Conservação de Recursos Hídricos</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:hebemcr@uepa.br" class="doc-link email">hebemcr@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 12 ── -->
+        <div class="docente-card" data-nome="hélio raymundo ferreira filho" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/helio.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Prof. Dr. Hélio Raymundo Ferreira Filho</h3>
+            <div class="area">Logística Verde, Economia Circular e Sustentabilidade</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:helio.ferreira@uepa.br" class="doc-link email">helio.ferreira@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 13 ── -->
+        <div class="docente-card" data-nome="ionara antunes terra" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/ionara.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Profa. Dra. Ionara Antunes Terra</h3>
+            <div class="area">Poluição Ambiental, Doenças Emergentes e Saúde na Amazônia</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:ionara.terra@uepa.br" class="doc-link email">ionara.terra@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 14 ── -->
+        <div class="docente-card" data-nome="josé augusto carvalho de araújo" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/jose-augusto.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Prof. Dr. José Augusto Carvalho de Araújo</h3>
+            <div class="area">Urbanização, Territorialidade e Sustentabilidade Rural e Urbana na Amazônia</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:augustocarvalho@uepa.br" class="doc-link email">augustocarvalho@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 15 ── -->
+        <div class="docente-card" data-nome="manoel tavares de paula" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/manoel.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Prof. Dr. Manoel Tavares de Paula</h3>
+            <div class="area">Estatística Aplicada às Ciências Ambientais e Gestão de Recursos Naturais</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:tavares@uepa.br" class="doc-link email">tavares@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 16 ── -->
+        <div class="docente-card" data-nome="norma ely santos beltrão" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/norma.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Profa. Dra. Norma Ely Santos Beltrão</h3>
+            <div class="area">Geoprocessamento Ambiental, Sensoriamento Remoto e Ciência de Dados Espaciais</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:normaely@uepa.br" class="doc-link email">normaely@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCENTE 17 ── -->
+        <div class="docente-card" data-nome="pablo luis baia figueiredo" data-categoria="permanente">
+          <div class="docente-foto">
+            <img src="fotos/pablo.jpg" alt="">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="docente-info">
+            <span class="docente-vinculo vinculo-permanente">Permanente</span>
+            <h3>Prof. Dr. Pablo Luis Baia Figueiredo</h3>
+            <div class="area">Química de Recursos Naturais e Bioeconomia na Amazônia</div>
+            <div class="docente-links">
+              <a href="#" class="doc-link">Lattes</a>
+              <a href="#" class="doc-link">ORCID</a>
+              <a href="mailto:pablo.figueiredo@uepa.br" class="doc-link email">pablo.figueiredo@uepa.br</a>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /docentes-grid -->
+
+      <p class="nota-fotos">
+        📷 Para adicionar a foto de um docente: salve a imagem como <code>fotos/[nome].jpg</code> na pasta do site e remova o <code>display:none</code> da tag <code>&lt;img&gt;</code> correspondente no HTML.
+      </p>
+
+    </main>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script>const PAGINA_ATIVA = 'pessoas';</script>
+<script src="ppgca-components.js"></script>
+<script>
+  // ── Busca por nome em tempo real ──
+  document.getElementById('busca-nome').addEventListener('input', function() {
+    const termo = this.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    document.querySelectorAll('.docente-card').forEach(card => {
+      const nome = card.dataset.nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      card.style.display = nome.includes(termo) ? '' : 'none';
+    });
+    atualizarContagem();
+  });
+
+  // ── Filtro por categoria ──
+  function filtrarCategoria() {
+    const todos       = document.getElementById('chk-todos').checked;
+    const permanente  = document.getElementById('chk-permanente').checked;
+    const colaborador = document.getElementById('chk-colaborador').checked;
+    document.querySelectorAll('.docente-card').forEach(card => {
+      const cat = card.dataset.categoria;
+      if (todos || (permanente && cat === 'permanente') || (colaborador && cat === 'colaborador')) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    atualizarContagem();
+  }
+
+  // ── Ordenação ──
+  function ordenarDocentes(criterio) {
+    const grid  = document.getElementById('docentes-grid');
+    const cards = [...grid.querySelectorAll('.docente-card')];
+    cards.sort((a, b) => {
+      if (criterio === 'nome')      return a.dataset.nome.localeCompare(b.dataset.nome, 'pt');
+      if (criterio === 'categoria') return a.dataset.categoria.localeCompare(b.dataset.categoria);
+    });
+    cards.forEach(c => grid.appendChild(c));
+  }
+
+  // ── Contagem visível ──
+  function atualizarContagem() {
+    const n = [...document.querySelectorAll('.docente-card')].filter(c => c.style.display !== 'none').length;
+    document.getElementById('total-count').textContent = n;
+  }
+</script>
+</body>
+</html>

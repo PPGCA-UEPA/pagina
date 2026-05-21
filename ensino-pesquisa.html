@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ensino e Pesquisa — PPGCA/UEPA</title>
+<link rel="stylesheet" href="ppgca-base.css">
+<style>
+  /* SIDEBAR NAV */
+  .sidebar-nav a { white-space: nowrap; }
+
+  /* ESTRUTURA */
+  .nivel-card {
+    background: var(--branco); border: 1px solid var(--borda); border-radius: 12px;
+    padding: 24px; margin-bottom: 16px; display: flex; gap: 20px;
+  }
+  .nivel-icon { width: 52px; height: 52px; border-radius: 12px; background: var(--fundo-alt); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .nivel-icon svg { width: 26px; height: 26px; stroke: var(--verde); fill: none; }
+  .nivel-info h3 { font-size: 17px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 4px; }
+  .nivel-info p { font-size: 13px; color: var(--cinza-medio); line-height: 1.6; }
+  .nivel-meta { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+  .nivel-meta span { font-size: 12px; color: var(--cinza-medio); display: flex; align-items: center; gap: 5px; }
+  .nivel-meta svg { width: 13px; height: 13px; stroke: var(--verde); fill: none; }
+  .nivel-meta strong { color: var(--cinza-texto); }
+
+  .matriz-lista { list-style: none; margin-top: 16px; }
+  .matriz-lista li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--borda); font-size: 13px; color: var(--cinza-texto); }
+  .matriz-lista li:last-child { border-bottom: none; }
+  .matriz-lista li::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--verde); flex-shrink: 0; }
+
+  /* DISCIPLINAS */
+  .semestre-header {
+    background: var(--verde-escuro); color: #fff; border-radius: 10px 10px 0 0;
+    padding: 14px 20px; display: flex; align-items: center; gap: 12px;
+    font-size: 14px; font-weight: 700; letter-spacing: .3px;
+  }
+  .semestre-header svg { width: 18px; height: 18px; stroke: #9ed45c; fill: none; }
+  .disciplinas-tabela { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 32px; border: 1px solid var(--borda); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; }
+  .disciplinas-tabela th { background: var(--fundo-alt); color: var(--verde-escuro); padding: 10px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--borda); }
+  .disciplinas-tabela td { padding: 12px 14px; border-bottom: 1px solid var(--borda); vertical-align: top; line-height: 1.4; }
+  .disciplinas-tabela tr:last-child td { border-bottom: none; }
+  .disciplinas-tabela tr:hover td { background: var(--fundo-alt); }
+  .disc-nome { font-weight: 600; color: var(--cinza-texto); }
+  .disc-periodo { white-space: nowrap; color: var(--cinza-medio); }
+  .disc-horario { white-space: nowrap; color: var(--cinza-medio); }
+  .disc-docente { color: var(--cinza-medio); font-size: 12px; }
+  .badge-obrig { background: var(--verde-claro); color: var(--verde-escuro); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
+  .badge-elet { background: #DBEAFE; color: #1E40AF; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
+  .badge-dout { background: #FEF3C7; color: #92400E; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
+  .ch-badge { background: #F3F4F6; color: #374151; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1600&q=80');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Home</a> › <span>Ensino e Pesquisa</span></div>
+      <h1>Ensino e Pesquisa</h1>
+      <p>Estrutura acadêmica, linhas de pesquisa, disciplinas e projetos do PPGCA.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="layout-sidebar">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <div class="sidebar-nav-title">Navegação</div>
+        <a href="#estrutura" class="ativo">Estrutura Acadêmica ›</a>
+        <a href="#linhas">Linhas de Pesquisa</a>
+        <a href="#disciplinas">Disciplinas 2026</a>
+        <a href="projetos.html">Projetos de Pesquisa</a>
+        <a href="infraestrutura.html">Infraestrutura</a>
+      </nav>
+
+      <div class="destaque-lateral" style="margin-top:20px;">
+        <h4>Em números</h4>
+        <div class="destaque-lateral-item">
+          <div class="destaque-lateral-icon">
+            <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          </div>
+          <div><h5>23 disciplinas</h5><p>Obrigatórias e eletivas em 2026</p></div>
+        </div>
+        <div class="destaque-lateral-item">
+          <div class="destaque-lateral-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div><h5>2 linhas de pesquisa</h5><p>Interdisciplinares e complementares</p></div>
+        </div>
+        <div class="destaque-lateral-item">
+          <div class="destaque-lateral-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+          <div><h5>Mestrado e Doutorado</h5><p>Acadêmicos, Área de Ciências Ambientais</p></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+
+      <!-- ESTRUTURA ACADÊMICA -->
+      <section id="estrutura">
+        <h2 class="content-title">Estrutura Acadêmica</h2>
+        <div class="content-title-line"></div>
+
+        <div class="content-text" style="margin-bottom:24px;">
+          <p>O PPGCA oferece <strong>Mestrado e Doutorado Acadêmicos</strong> na Área de Ciências Ambientais da CAPES, com área de concentração em <strong>Ambiente e Sustentabilidade na Amazônia Brasileira</strong>. O programa está organizado em duas linhas de pesquisa interdisciplinares, que congregam docentes das ciências naturais, exatas, sociais e humanas.</p>
+        </div>
+
+        <div class="nivel-card">
+          <div class="nivel-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+          <div class="nivel-info">
+            <h3>Mestrado Acadêmico</h3>
+            <p>Formação avançada de pesquisadores e profissionais para atuação em ciências ambientais, com foco na Amazônia. Implantado em <strong>2010</strong>.</p>
+            <div class="nivel-meta">
+              <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Duração: <strong>24 meses</strong></span>
+              <span><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Créditos mínimos: <strong>a confirmar</strong></span>
+              <span><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Vagas anuais: <strong>~15</strong></span>
+            </div>
+            <p style="margin-top:10px;font-size:13px;color:var(--cinza-medio);">Área de concentração: <em>Ambiente e Sustentabilidade na Amazônia Brasileira</em></p>
+          </div>
+        </div>
+
+        <div class="nivel-card">
+          <div class="nivel-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div class="nivel-info">
+            <h3>Doutorado Acadêmico</h3>
+            <p>Formação de pesquisadores para produção de conhecimento de alto impacto científico na Amazônia. Implantado em <strong>2021</strong>.</p>
+            <div class="nivel-meta">
+              <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Duração: <strong>48 meses</strong></span>
+              <span><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Créditos mínimos: <strong>a confirmar</strong></span>
+              <span><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Vagas anuais: <strong>~10</strong></span>
+            </div>
+            <p style="margin-top:10px;font-size:13px;color:var(--cinza-medio);">Área de concentração: <em>Ambiente e Sustentabilidade na Amazônia Brasileira</em></p>
+          </div>
+        </div>
+
+        <!-- LINHAS -->
+        <h3 class="content-title" style="font-size:22px;margin-top:40px;margin-bottom:6px;" id="linhas">Linhas de Pesquisa</h3>
+        <div class="content-title-line"></div>
+        <div class="cards-grid-2" style="margin-bottom:12px;">
+          <a href="pesquisa.html" class="card" style="text-decoration:none;">
+            <div class="card-body">
+              <span class="card-tag">Linha 1</span>
+              <h3>Meio Ambiente e Sustentabilidade</h3>
+              <p>Gestão de recursos naturais, políticas públicas, educação ambiental, economia ecológica, poluição e tecnologias ambientais.</p>
+              <div style="margin-top:14px;"><span class="saiba-mais">Ver linha completa →</span></div>
+            </div>
+          </a>
+          <a href="pesquisa.html" class="card" style="text-decoration:none;">
+            <div class="card-body">
+              <span class="card-tag">Linha 2</span>
+              <h3>Estudos de Ecossistemas Amazônicos</h3>
+              <p>Biodiversidade, ecossistemas aquáticos, recursos hídricos, geoprocessamento, mudanças climáticas e modelagem ambiental.</p>
+              <div style="margin-top:14px;"><span class="saiba-mais">Ver linha completa →</span></div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- DISCIPLINAS -->
+      <section id="disciplinas" style="margin-top:56px;padding-top:40px;border-top:1px solid var(--borda);">
+        <h2 class="content-title">Disciplinas 2026</h2>
+        <div class="content-title-line"></div>
+        <p style="font-size:14px;color:var(--cinza-medio);margin-bottom:28px;">Calendário acadêmico vigente para Belém — Mestrado e Doutorado. <a href="#" style="color:var(--verde);font-weight:600;">↓ Baixar calendário completo (PDF)</a></p>
+
+        <!-- 1º SEMESTRE -->
+        <div class="semestre-header">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+          1º Semestre de 2026 — Mestrado e Doutorado
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="disciplinas-tabela">
+            <thead>
+              <tr>
+                <th>Disciplina</th>
+                <th>Período</th>
+                <th>Horário</th>
+                <th>C.H. / Créd.</th>
+                <th>Categoria</th>
+                <th>Docente Coordenador</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="disc-nome">Interdisciplinaridade, Meio Ambiente e Sustentabilidade</div></td>
+                <td class="disc-periodo">09 a 24/03</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">60h / 4</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">Altem Nascimento Pontes</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Estatística Aplicada às Ciências Ambientais</div></td>
+                <td class="disc-periodo">06 a 22/04</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">60h / 4</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">Manoel Tavares de Paula</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Logística Verde</div></td>
+                <td class="disc-periodo">20 a 30/04</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Hélio Raymundo Ferreira Filho</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Dinâmica e Socioeconomia dos Ecossistemas Amazônicos</div></td>
+                <td class="disc-periodo">04 a 19/05</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">60h / 4</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">Flávia Cristina Araújo Lucas</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Metodologia de Pesquisa e Redação Científica</div></td>
+                <td class="disc-periodo">18 a 28/05</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">45h / 4</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Altem Nascimento Pontes</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Poluição e Doenças Emergentes na Amazônia: Abordagens Educacionais</div></td>
+                <td class="disc-periodo">08 a 18/06</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Ionara Antunes Terra</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Epidemiologia e Controle de Doenças Tropicais na Amazônia</div></td>
+                <td class="disc-periodo">08 a 18/06</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Cléa Nazaré Carneiro Bichara</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Geoprocessamento Ambiental</div></td>
+                <td class="disc-periodo">15 a 25/06</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Norma Ely Santos Beltrão</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Qualidade, Manejo e Conservação de Recursos Hídricos</div></td>
+                <td class="disc-periodo">15 a 25/06</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Hebe Morganne Campos Ribeiro</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Seminário de Pesquisa de Mestrado I — Turma 2026</div></td>
+                <td class="disc-periodo">02/03 a 30/06</td>
+                <td class="disc-horario">08h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">Ana Cláudia Caldeira Tavares Martins</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Exame de Qualificação de Mestrado — Turma 2025</div></td>
+                <td class="disc-periodo">02/03 a 30/06</td>
+                <td class="disc-horario">08h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">—</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Seminário de Pesquisa de Doutorado II — Turma 2023-2</div></td>
+                <td class="disc-periodo">02/03 a 30/06</td>
+                <td class="disc-horario">08h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">Ana Karina Moreyra</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Provas de Proficiência em Língua Inglesa e/ou Espanhola</div></td>
+                <td class="disc-periodo">25/06</td>
+                <td class="disc-horario">09h às 11h</td>
+                <td>—</td>
+                <td>—</td>
+                <td class="disc-docente">—</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">IV Escola de Meio Ambiente e Sustentabilidade / IX Escola de Verão</div></td>
+                <td class="disc-periodo">29/06 a 01/07</td>
+                <td class="disc-horario">08h às 18h</td>
+                <td>—</td>
+                <td>—</td>
+                <td class="disc-docente">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 2º SEMESTRE -->
+        <div class="semestre-header">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+          2º Semestre de 2026 — Mestrado e Doutorado
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="disciplinas-tabela">
+            <thead>
+              <tr>
+                <th>Disciplina</th>
+                <th>Período</th>
+                <th>Horário</th>
+                <th>C.H. / Créd.</th>
+                <th>Categoria</th>
+                <th>Docente Coordenador</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="disc-nome">Interdisciplinaridade, Meio Ambiente e Sustentabilidade</div></td>
+                <td class="disc-periodo">03 a 18/08</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">60h / 4</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">Ionara Antunes Terra</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Biodiversidade Microbiana e de Plantas Avasculares na Funcionalidade de Florestas Tropicais</div></td>
+                <td class="disc-periodo">03 a 13/08</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Alcindo da Silva Martins Junior</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Química de Recursos Naturais e Bioeconomia na Amazônia</div></td>
+                <td class="disc-periodo">19 a 31/08</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Pablo Luis Baia Figueiredo</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Mudanças Climáticas: Biodiversidade e Meio Ambiente</div></td>
+                <td class="disc-periodo">19 a 31/08</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">45h / 4</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Carlos Elias de Souza Braga</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Desenvolvimento Agrícola, Economia Extrativa e Política Ambiental na Amazônia</div></td>
+                <td class="disc-periodo">01 a 14/09</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Alfredo Kingo Oyama Homma</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Educação Ambiental e Desenvolvimento Sustentável na Amazônia</div></td>
+                <td class="disc-periodo">01 a 14/09</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Altem Nascimento Pontes</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Práticas de Campo em Ciências Ambientais</div></td>
+                <td class="disc-periodo">21/09 a 01/10</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Ana Lúcia Nunes Gutjahr</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Urbanização, Territorialidade e Sustentabilidade Rural e Urbana na Amazônia</div></td>
+                <td class="disc-periodo">21/09 a 01/10</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">José Augusto Carvalho de Araújo</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Gestão, Manejo e Conservação de Recursos Naturais da Amazônia</div></td>
+                <td class="disc-periodo">05 a 21/10</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">60h / 4</span></td>
+                <td><span class="badge-dout">Obrig. Doutorado</span></td>
+                <td class="disc-docente">Manoel Tavares de Paula</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Biodiversidade, Cultura e Natureza nas Sociedades Amazônicas</div></td>
+                <td class="disc-periodo">05 a 16/10</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Flávia Cristina Araújo Lucas</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Biomonitoramento e Saúde Ambiental de Ecossistemas Aquáticos Amazônicos</div></td>
+                <td class="disc-periodo">19 a 30/10</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Ana Karina Moreyra</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Economia Circular e Sustentabilidade</div></td>
+                <td class="disc-periodo">19 a 30/10</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Hélio Raymundo Ferreira Filho</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Monitoramento e Conservação Ambiental</div></td>
+                <td class="disc-periodo">19 a 30/10</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Ana Cláudia Caldeira Tavares Martins</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Ciência de Dados Espaciais e Aplicações em Análise Ambiental</div></td>
+                <td class="disc-periodo">03 a 13/11</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Norma Ely Santos Beltrão</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Análise e Avaliação de Impactos Ambientais</div></td>
+                <td class="disc-periodo">03 a 13/11</td>
+                <td class="disc-horario">14h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-elet">Eletiva</span></td>
+                <td class="disc-docente">Gundisalvo Piratoba Morales</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">XV Simpósio de Estudos e Pesquisas em Ciências Ambientais na Amazônia</div></td>
+                <td class="disc-periodo">17 a 19/11</td>
+                <td class="disc-horario">08h às 20h</td>
+                <td>—</td>
+                <td>—</td>
+                <td class="disc-docente">—</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Estatística Aplicada às Ciências Ambientais</div></td>
+                <td class="disc-periodo">23/11 a 09/12</td>
+                <td class="disc-horario">08h às 12h</td>
+                <td><span class="ch-badge">60h / 4</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">Altem Nascimento Pontes</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Seminário de Pesquisa de Mestrado II — Turma 2026</div></td>
+                <td class="disc-periodo">03/08 a 30/11</td>
+                <td class="disc-horario">08h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">Norma Ely Santos Beltrão</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Defesa de Dissertação de Mestrado — Turma 2025</div></td>
+                <td class="disc-periodo">03/08/26 a 26/02/27</td>
+                <td class="disc-horario">08h às 18h</td>
+                <td>—</td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">—</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Seminário de Pesquisa de Doutorado I — Turma 2026</div></td>
+                <td class="disc-periodo">03/08 a 30/11</td>
+                <td class="disc-horario">08h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">Alcindo da Silva Martins Junior</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Exame de Qualificação de Doutorado — Turma 2025</div></td>
+                <td class="disc-periodo">03/08 a 30/11</td>
+                <td class="disc-horario">08h às 18h</td>
+                <td>—</td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">—</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Seminário de Pesquisa de Doutorado II — Turma 2024</div></td>
+                <td class="disc-periodo">03/08 a 30/11</td>
+                <td class="disc-horario">08h às 18h</td>
+                <td><span class="ch-badge">45h / 3</span></td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">Hélio Raymundo Ferreira Filho</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Defesa de Tese de Doutorado — Turma 2023-1</div></td>
+                <td class="disc-periodo">03/08/26 a 26/02/27</td>
+                <td class="disc-horario">08h às 18h</td>
+                <td>—</td>
+                <td><span class="badge-obrig">Obrigatória</span></td>
+                <td class="disc-docente">—</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Confraternização de Natal e Ano Novo</div></td>
+                <td class="disc-periodo">11/12</td>
+                <td class="disc-horario">19h às 22h</td>
+                <td>—</td>
+                <td>—</td>
+                <td class="disc-docente">—</td>
+              </tr>
+              <tr>
+                <td><div class="disc-nome">Período de Recesso</div></td>
+                <td class="disc-periodo">14/12/26 a 03/01/27</td>
+                <td class="disc-horario">—</td>
+                <td>—</td>
+                <td>—</td>
+                <td class="disc-docente">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+          <div style="display:flex;gap:8px;align-items:center;font-size:12px;color:var(--cinza-medio);">
+            <span class="badge-obrig">Obrigatória</span> Disciplina obrigatória para Mestrado
+            <span class="badge-dout">Obrig. Doutorado</span> Obrigatória exclusiva para Doutorado
+            <span class="badge-elet">Eletiva</span> Disciplina eletiva / optativa
+          </div>
+          <a href="#" class="btn btn-outline btn-sm" style="margin-left:auto;">↓ Baixar Calendário Completo (PDF)</a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script>const PAGINA_ATIVA = 'ensino';</script>
+<script src="ppgca-components.js"></script>
+</body>
+</html>

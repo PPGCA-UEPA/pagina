@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPGCA/UEPA — Programa de Pós-Graduação em Ciências Ambientais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #4A7C2E;
+    --verde-escuro: #2E5A1C;
+    --verde-claro: #E8F1DE;
+    --verde-hover: #3d6a24;
+    --azul-uepa: #003876;
+    --cinza-texto: #2a2a2a;
+    --cinza-medio: #666;
+    --cinza-claro: #f5f5f5;
+    --branco: #ffffff;
+    --fundo-alt: #F4F9EF;
+    --borda: #e0e0e0;
+    --sombra: 0 2px 16px rgba(46,90,28,0.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--cinza-texto);
+    background: var(--branco);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ─── BARRA DE ACESSIBILIDADE ─── */
+  .barra-acessibilidade {
+    background: var(--verde-escuro);
+    color: #cde8b2;
+    font-size: 12px;
+    padding: 6px 0;
+  }
+  .barra-acessibilidade .inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 32px;
+    display: flex; justify-content: flex-end; gap: 24px;
+  }
+  .barra-acessibilidade a {
+    color: #cde8b2; text-decoration: none; display: flex; align-items: center; gap: 5px;
+    transition: color .2s;
+  }
+  .barra-acessibilidade a:hover { color: #fff; }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--branco);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 32px;
+    display: flex; align-items: center; gap: 32px; height: 80px;
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 16px; text-decoration: none; flex-shrink: 0; }
+  .logo-uepa {
+    height: 56px; width: auto; object-fit: contain;
+    border-right: 1px solid var(--borda); padding-right: 16px;
+  }
+  .logo-ppgca {
+    height: 48px; width: auto; object-fit: contain;
+  }
+
+  nav { flex: 1; display: flex; justify-content: center; }
+  nav ul { list-style: none; display: flex; gap: 4px; }
+  nav ul li { position: relative; }
+  nav ul li a {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 13px; font-weight: 600; letter-spacing: .3px;
+    color: var(--cinza-texto); text-decoration: none;
+    padding: 8px 12px; border-radius: 6px;
+    transition: background .2s, color .2s;
+    text-transform: uppercase;
+  }
+  nav ul li a:hover, nav ul li a.ativo { background: var(--fundo-alt); color: var(--verde); }
+  nav ul li a .chevron { font-size: 10px; opacity: .6; }
+
+  /* Dropdown */
+  .dropdown { position: relative; }
+  .dropdown-menu {
+    display: none; position: absolute; top: calc(100% + 8px); left: 0;
+    background: var(--branco); border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+    min-width: 220px; padding: 8px 0; z-index: 200;
+  }
+  .dropdown:hover .dropdown-menu { display: block; }
+  .dropdown-menu a {
+    display: block; padding: 10px 20px;
+    font-size: 13px; font-weight: 400; text-transform: none;
+    color: var(--cinza-texto); text-decoration: none; border-radius: 0;
+    letter-spacing: 0;
+    transition: background .15s, color .15s;
+  }
+  .dropdown-menu a:hover { background: var(--fundo-alt); color: var(--verde); }
+
+  .header-actions { display: flex; align-items: center; gap: 12px; }
+  .btn-busca {
+    background: none; border: none; cursor: pointer; padding: 8px;
+    color: var(--cinza-medio); border-radius: 6px; transition: background .2s;
+    display: flex; align-items: center;
+  }
+  .btn-busca:hover { background: var(--fundo-alt); color: var(--verde); }
+  .btn-area-aluno {
+    background: var(--verde); color: #fff; font-size: 12px; font-weight: 600;
+    padding: 8px 16px; border-radius: 6px; text-decoration: none;
+    border: none; cursor: pointer; transition: background .2s;
+    white-space: nowrap;
+  }
+  .btn-area-aluno:hover { background: var(--verde-hover); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative; overflow: hidden;
+    height: 560px; display: flex; align-items: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(135deg, rgba(46,90,28,0.88) 0%, rgba(46,90,28,0.55) 50%, rgba(0,0,0,0.30) 100%),
+      url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1600&q=80') center/cover no-repeat;
+  }
+  .hero-content {
+    position: relative; z-index: 1;
+    max-width: 1280px; margin: 0 auto; padding: 0 32px;
+    width: 100%; display: flex; align-items: center; justify-content: space-between;
+  }
+  .hero-texto { max-width: 540px; }
+  .hero-texto h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px; font-weight: 900; line-height: 1.1;
+    color: #fff; margin-bottom: 12px;
+  }
+  .hero-texto h1 span { color: #9ed45c; }
+  .hero-texto p {
+    font-size: 17px; color: rgba(255,255,255,0.88); margin-bottom: 32px;
+    max-width: 420px; line-height: 1.7;
+  }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--verde); color: #fff; font-size: 13px; font-weight: 700;
+    padding: 14px 28px; border-radius: 8px; text-decoration: none;
+    letter-spacing: .5px; text-transform: uppercase;
+    transition: background .2s, transform .15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--verde-escuro); transform: translateY(-1px); }
+  .btn-outline-branco {
+    background: transparent; color: #fff; font-size: 13px; font-weight: 600;
+    padding: 14px 28px; border-radius: 8px; text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.6); letter-spacing: .5px; text-transform: uppercase;
+    transition: border-color .2s, background .2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-outline-branco:hover { border-color: #fff; background: rgba(255,255,255,0.10); }
+
+  .hero-diferenciais {
+    display: flex; flex-direction: column; gap: 20px;
+    padding-left: 60px; border-left: 1px solid rgba(255,255,255,0.20);
+  }
+  .hero-item { display: flex; align-items: flex-start; gap: 14px; }
+  .hero-item-icon {
+    width: 42px; height: 42px; background: rgba(158,212,92,0.18);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .hero-item-icon svg { width: 22px; height: 22px; stroke: #9ed45c; fill: none; stroke-width: 1.8; }
+  .hero-item h3 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .hero-item p { font-size: 12px; color: rgba(255,255,255,0.72); line-height: 1.5; }
+
+  /* ─── ATALHOS RÁPIDOS ─── */
+  .atalhos-wrap {
+    max-width: 1200px; margin: -32px auto 0; position: relative; z-index: 10; padding: 0 32px;
+  }
+  .atalhos-card {
+    background: #fff; border-radius: 16px; box-shadow: var(--sombra);
+    display: flex; align-items: center; justify-content: space-around; padding: 28px 32px;
+    border: 1px solid var(--borda);
+  }
+  .atalho {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--cinza-texto);
+    padding: 12px 20px; border-radius: 10px; transition: background .2s, color .2s;
+    min-width: 100px; text-align: center;
+  }
+  .atalho:hover { background: var(--fundo-alt); color: var(--verde); }
+  .atalho-icon {
+    width: 52px; height: 52px; background: var(--fundo-alt); border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+  }
+  .atalho:hover .atalho-icon { background: var(--verde-claro); }
+  .atalho-icon svg { width: 26px; height: 26px; stroke: var(--verde); fill: none; stroke-width: 1.8; }
+  .atalho span { font-size: 12px; font-weight: 600; letter-spacing: .2px; }
+  .atalho-sep { width: 1px; height: 60px; background: var(--borda); }
+
+  /* ─── INDICADORES ─── */
+  .indicadores {
+    background: var(--verde-escuro); padding: 48px 0; margin-top: 64px;
+  }
+  .indicadores-inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 32px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .ind-texto { flex: 1; }
+  .ind-texto h2 {
+    font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: #fff;
+    margin-bottom: 6px;
+  }
+  .ind-texto p { font-size: 14px; color: rgba(255,255,255,.65); }
+  .ind-grid { display: flex; gap: 0; flex: 2; }
+  .ind-item {
+    flex: 1; text-align: center; padding: 0 32px;
+    border-left: 1px solid rgba(255,255,255,.15);
+  }
+  .ind-item:first-child { border-left: 0; }
+  .ind-item .num {
+    font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 900;
+    color: #9ed45c; line-height: 1;
+  }
+  .ind-item .num sup { font-size: 22px; }
+  .ind-item .label { font-size: 12px; color: rgba(255,255,255,.7); margin-top: 6px; line-height: 1.4; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; }
+
+  /* ─── SEÇÃO GENÉRICA ─── */
+  section { padding: 72px 0; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+  .sec-header { margin-bottom: 40px; }
+  .sec-header h2 {
+    font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; color: var(--verde-escuro);
+    margin-bottom: 6px;
+  }
+  .sec-header .linha {
+    width: 48px; height: 4px; background: var(--verde); border-radius: 2px; margin-top: 10px;
+  }
+  .sec-header p { font-size: 15px; color: var(--cinza-medio); margin-top: 10px; }
+
+  /* ─── DESTAQUES ─── */
+  .destaques-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  }
+  .destaque-card {
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    text-decoration: none; color: var(--cinza-texto);
+    transition: transform .2s, box-shadow .2s;
+    display: flex; flex-direction: column;
+    border: 1px solid var(--borda);
+  }
+  .destaque-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(46,90,28,.15); }
+  .destaque-img {
+    height: 180px; overflow: hidden; position: relative;
+  }
+  .destaque-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .destaque-card:hover .destaque-img img { transform: scale(1.05); }
+  .destaque-cat {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--verde); color: #fff;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 4px;
+  }
+  .destaque-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+  .destaque-body h3 { font-size: 16px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 8px; line-height: 1.4; }
+  .destaque-body p { font-size: 13px; color: var(--cinza-medio); line-height: 1.6; flex: 1; }
+  .saiba-mais {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: var(--verde);
+    margin-top: 14px; text-decoration: none;
+    transition: gap .2s;
+  }
+  .saiba-mais:hover { gap: 10px; }
+
+  /* ─── NOTÍCIAS + EVENTOS ─── */
+  .noticias-eventos { background: var(--fundo-alt); }
+  .noticias-eventos .layout {
+    display: grid; grid-template-columns: 1fr 380px; gap: 48px;
+  }
+
+  /* Notícias */
+  .noticia-destaque {
+    display: grid; grid-template-columns: 200px 1fr; gap: 24px;
+    padding-bottom: 24px; border-bottom: 1px solid var(--borda);
+    margin-bottom: 24px; text-decoration: none; color: var(--cinza-texto);
+  }
+  .noticia-destaque img { width: 100%; height: 130px; object-fit: cover; border-radius: 8px; }
+  .noticia-destaque-body .meta { font-size: 11px; color: var(--cinza-medio); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+  .noticia-destaque-body .meta span { color: var(--verde); font-weight: 600; margin-right: 8px; }
+  .noticia-destaque-body h3 { font-size: 17px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 8px; line-height: 1.4; }
+  .noticia-destaque-body p { font-size: 13px; color: var(--cinza-medio); line-height: 1.6; }
+  .noticia-destaque-body h3:hover { color: var(--verde); }
+
+  .noticias-mini { display: flex; flex-direction: column; gap: 0; }
+  .noticia-mini {
+    display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--borda);
+    text-decoration: none; color: var(--cinza-texto); transition: color .2s;
+  }
+  .noticia-mini:last-child { border-bottom: none; }
+  .noticia-mini:hover h4 { color: var(--verde); }
+  .noticia-mini img { width: 72px; height: 56px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+  .noticia-mini-body .meta { font-size: 10px; color: var(--cinza-medio); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .5px; }
+  .noticia-mini-body .meta span { color: var(--verde); font-weight: 600; margin-right: 6px; }
+  .noticia-mini-body h4 { font-size: 14px; font-weight: 600; color: var(--cinza-texto); line-height: 1.4; transition: color .2s; }
+
+  .btn-ver-mais {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--verde); color: #fff;
+    font-size: 13px; font-weight: 600; letter-spacing: .3px;
+    padding: 12px 24px; border-radius: 7px; text-decoration: none;
+    margin-top: 24px; transition: background .2s;
+  }
+  .btn-ver-mais:hover { background: var(--verde-escuro); }
+
+  /* Eventos */
+  .eventos-titulo {
+    font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700;
+    color: var(--verde-escuro); margin-bottom: 6px;
+  }
+  .eventos-linha { width: 36px; height: 3px; background: var(--verde); border-radius: 2px; margin-bottom: 24px; }
+  .evento {
+    display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--borda);
+  }
+  .evento:last-child { border-bottom: none; }
+  .evento-data {
+    text-align: center; min-width: 52px; flex-shrink: 0;
+  }
+  .evento-data .dia {
+    font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900;
+    color: var(--verde); line-height: 1;
+  }
+  .evento-data .mes {
+    font-size: 11px; font-weight: 700; color: var(--cinza-medio); text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .evento-body { flex: 1; }
+  .evento-tag {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .8px;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 3px; margin-bottom: 6px;
+    background: var(--verde-claro); color: var(--verde-escuro);
+  }
+  .evento-tag.defesa { background: #FEF3C7; color: #92400E; }
+  .evento-tag.aberto { background: #DBEAFE; color: #1E40AF; }
+  .evento-tag.edital { background: #FCE7F3; color: #9D174D; }
+  .evento-body h4 { font-size: 14px; font-weight: 700; color: var(--cinza-texto); margin-bottom: 4px; line-height: 1.4; }
+  .evento-body p { font-size: 12px; color: var(--cinza-medio); }
+  .btn-calendario {
+    display: block; text-align: center; margin-top: 20px;
+    border: 2px solid var(--verde); color: var(--verde);
+    font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+    padding: 12px; border-radius: 7px; text-decoration: none;
+    transition: background .2s, color .2s;
+  }
+  .btn-calendario:hover { background: var(--verde); color: #fff; }
+
+  /* ─── PERFIS RÁPIDOS ─── */
+  .perfis { background: var(--verde-escuro); }
+  .perfis .container { display: flex; align-items: center; gap: 48px; }
+  .perfis-texto { color: #fff; flex-shrink: 0; max-width: 280px; }
+  .perfis-texto h2 {
+    font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin-bottom: 8px;
+  }
+  .perfis-texto p { font-size: 14px; color: rgba(255,255,255,.65); }
+  .perfis-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; flex: 1; }
+  .perfil-btn {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+    border-radius: 12px; padding: 24px 16px; text-align: center; text-decoration: none;
+    color: #fff; transition: background .2s, border-color .2s, transform .15s;
+  }
+  .perfil-btn:hover { background: rgba(158,212,92,.15); border-color: #9ed45c; transform: translateY(-2px); }
+  .perfil-btn svg { width: 36px; height: 36px; stroke: #9ed45c; fill: none; stroke-width: 1.6; margin-bottom: 12px; }
+  .perfil-btn h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .perfil-btn p { font-size: 12px; color: rgba(255,255,255,.6); line-height: 1.4; }
+
+  /* ─── NEWSLETTER ─── */
+  .newsletter { background: var(--fundo-alt); padding: 48px 0; }
+  .newsletter .inner {
+    max-width: 700px; margin: 0 auto; text-align: center; padding: 0 32px;
+  }
+  .newsletter svg { width: 32px; height: 32px; stroke: var(--verde); fill: none; margin-bottom: 12px; }
+  .newsletter h3 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 6px; }
+  .newsletter p { font-size: 14px; color: var(--cinza-medio); margin-bottom: 20px; }
+  .newsletter-form { display: flex; gap: 12px; justify-content: center; }
+  .newsletter-form input {
+    flex: 1; max-width: 360px;
+    border: 1.5px solid var(--borda); border-radius: 8px;
+    padding: 12px 18px; font-size: 14px; font-family: inherit;
+    outline: none; transition: border-color .2s;
+  }
+  .newsletter-form input:focus { border-color: var(--verde); }
+  .newsletter-form button {
+    background: var(--verde); color: #fff; font-size: 13px; font-weight: 700;
+    padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer;
+    letter-spacing: .5px; text-transform: uppercase; transition: background .2s;
+  }
+  .newsletter-form button:hover { background: var(--verde-escuro); }
+
+  /* ─── FOOTER ─── */
+  footer { background: var(--verde-escuro); color: rgba(255,255,255,.8); }
+  .footer-top {
+    max-width: 1280px; margin: 0 auto; padding: 56px 32px 40px;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+  }
+  .footer-brand .logo-footer {
+    font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 900;
+    color: #fff; margin-bottom: 12px; display: block;
+  }
+  .footer-brand p { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.7; margin-bottom: 20px; }
+  .footer-social { display: flex; gap: 10px; }
+  .footer-social a {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.2);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,.7); text-decoration: none; font-size: 14px;
+    transition: background .2s, border-color .2s, color .2s;
+  }
+  .footer-social a:hover { background: var(--verde); border-color: var(--verde); color: #fff; }
+  .footer-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #9ed45c; margin-bottom: 16px; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul li a { color: rgba(255,255,255,.65); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .footer-col ul li a:hover { color: #fff; }
+  .footer-col .info-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; font-size: 13px; color: rgba(255,255,255,.65); }
+  .footer-col .info-item svg { width: 16px; height: 16px; stroke: #9ed45c; fill: none; flex-shrink: 0; margin-top: 2px; }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.1);
+    max-width: 1280px; margin: 0 auto; padding: 20px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: rgba(255,255,255,.4);
+  }
+  .footer-bottom-links { display: flex; gap: 20px; }
+  .footer-bottom-links a { color: rgba(255,255,255,.4); text-decoration: none; transition: color .2s; }
+  .footer-bottom-links a:hover { color: rgba(255,255,255,.8); }
+
+  /* ─── MÉTRICAS IMAGEM MARCA ─── */
+  .marca-num {
+    background: linear-gradient(135deg, var(--verde-escuro), #1a3c0f);
+    padding: 56px 0;
+  }
+  .marca-num .inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 32px;
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 0; align-items: center;
+  }
+  .marca-texto { padding-right: 48px; border-right: 1px solid rgba(255,255,255,.15); }
+  .marca-texto h2 {
+    font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #fff;
+    line-height: 1.3; margin-bottom: 6px;
+  }
+  .marca-texto p { font-size: 13px; color: rgba(255,255,255,.55); }
+  .marca-stat { text-align: center; padding: 0 24px; border-right: 1px solid rgba(255,255,255,.15); }
+  .marca-stat:last-child { border-right: none; }
+  .marca-stat svg { width: 28px; height: 28px; stroke: #9ed45c; fill: none; margin-bottom: 10px; }
+  .marca-stat .n { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 900; color: #fff; line-height: 1; }
+  .marca-stat .n span { font-size: 20px; color: #9ed45c; }
+  .marca-stat .l { font-size: 12px; color: rgba(255,255,255,.55); margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+</style>
+</head>
+<body>
+
+<!-- BARRA DE ACESSIBILIDADE -->
+<div class="barra-acessibilidade">
+  <div class="inner">
+    <a href="#">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="M12 7v8m-4-4h8"/></svg>
+      Acessibilidade
+    </a>
+    <a href="#">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Alto Contraste
+    </a>
+    <a href="#">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z"/></svg>
+      VLibras
+    </a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo-wrap">
+      <img src="logo_UEPA.jpg" alt="Brasão da UEPA" class="logo-uepa">
+      <img src="Logo_ciencias_ambientais.jpg" alt="PPGCA — Programa de Pós-Graduação em Ciências Ambientais / UEPA" class="logo-ppgca">
+    </a>
+
+    <nav>
+      <ul>
+        <li class="dropdown">
+          <a href="#" class="ativo">Institucional <span class="chevron">▾</span></a>
+          <div class="dropdown-menu">
+            <a href="#">Apresentação</a>
+            <a href="#">Histórico</a>
+            <a href="#">Missão, Visão e Valores</a>
+            <a href="#">Coordenação e Colegiado</a>
+            <a href="#">Regimento e Normas</a>
+            <a href="#">Calendário Acadêmico</a>
+            <a href="#">Transparência</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="ensino-pesquisa.html">Ensino e Pesquisa <span class="chevron">▾</span></a>
+          <div class="dropdown-menu">
+            <a href="ensino-pesquisa.html#estrutura">Estrutura Acadêmica</a>
+            <a href="pesquisa.html">Linhas de Pesquisa</a>
+            <a href="ensino-pesquisa.html#disciplinas">Disciplinas</a>
+            <a href="projetos.html">Projetos de Pesquisa</a>
+            <a href="infraestrutura.html">Infraestrutura e Laboratórios</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="producao.html">Produção Científica <span class="chevron">▾</span></a>
+          <div class="dropdown-menu">
+            <a href="producao.html#artigos">Artigos e Periódicos</a>
+            <a href="producao.html#dissertacoes">Dissertações e Teses</a>
+            <a href="producao.html#livros">Livros e Capítulos</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="cooperacao.html">Extensão e Internacionalização <span class="chevron">▾</span></a>
+          <div class="dropdown-menu">
+            <a href="cooperacao.html#eventos">Eventos Acadêmicos</a>
+            <a href="cooperacao.html#extensao">Inserção Social e Extensão</a>
+            <a href="cooperacao.html#internacional">Internacionalização</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="docentes.html">Pessoas <span class="chevron">▾</span></a>
+          <div class="dropdown-menu">
+            <a href="docentes.html">Corpo Docente</a>
+            <a href="discentes.html">Discentes</a>
+            <a href="discentes.html#egressos">Egressos</a>
+          </div>
+        </li>
+        <li><a href="seletivo.html">Processo Seletivo</a></li>
+        <li><a href="noticias.html">Notícias</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn-busca" title="Buscar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <a href="#" class="btn-area-aluno">Portal do Aluno</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-texto">
+      <h1>Ciência que transforma.<br><span>Amazônia que inspira.</span></h1>
+      <p>Produzimos conhecimento científico de excelência para compreender, conservar e promover o uso sustentável da Amazônia.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn-primary">Conheça o PPGCA →</a>
+        <a href="#" class="btn-outline-branco">Linhas de Pesquisa</a>
+      </div>
+    </div>
+    <div class="hero-diferenciais">
+      <div class="hero-item">
+        <div class="hero-item-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+        </div>
+        <div>
+          <h3>Pesquisa de excelência</h3>
+          <p>Produção científica relevante e impacto socioambiental</p>
+        </div>
+      </div>
+      <div class="hero-item">
+        <div class="hero-item-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div>
+          <h3>Formação qualificada</h3>
+          <p>Mestrado e Doutorado com visão interdisciplinar</p>
+        </div>
+      </div>
+      <div class="hero-item">
+        <div class="hero-item-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div>
+          <h3>Compromisso socioambiental</h3>
+          <p>Ciência a serviço da sociedade e da Amazônia</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ATALHOS RÁPIDOS -->
+<div class="atalhos-wrap">
+  <div class="atalhos-card">
+    <a href="#" class="atalho">
+      <div class="atalho-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 015 5 5 5 0 01-5 5 5 5 0 01-5-5 5 5 0 015-5z"/><path d="M12 14c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4z"/></svg>
+      </div>
+      <span>Corpo Docente</span>
+    </a>
+    <div class="atalho-sep"></div>
+    <a href="#" class="atalho">
+      <div class="atalho-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <span>Discentes</span>
+    </a>
+    <div class="atalho-sep"></div>
+    <a href="#" class="atalho">
+      <div class="atalho-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <span>Linhas de Pesquisa</span>
+    </a>
+    <div class="atalho-sep"></div>
+    <a href="#" class="atalho">
+      <div class="atalho-icon">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <span>Produção Científica</span>
+    </a>
+    <div class="atalho-sep"></div>
+    <a href="#" class="atalho">
+      <div class="atalho-icon">
+        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      </div>
+      <span>Laboratórios</span>
+    </a>
+    <div class="atalho-sep"></div>
+    <a href="#" class="atalho">
+      <div class="atalho-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+      </div>
+      <span>Extensão e Int'l</span>
+    </a>
+    <div class="atalho-sep"></div>
+    <a href="#" class="atalho">
+      <div class="atalho-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <span>Notícias e Eventos</span>
+    </a>
+  </div>
+</div>
+
+<!-- DESTAQUES -->
+<section>
+  <div class="container">
+    <div class="sec-header">
+      <h2>Destaques</h2>
+      <div class="linha"></div>
+    </div>
+    <div class="destaques-grid">
+      <a href="#" class="destaque-card">
+        <div class="destaque-img">
+          <img src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=400&q=80" alt="Processo Seletivo">
+          <div class="destaque-cat">Processo Seletivo</div>
+        </div>
+        <div class="destaque-body">
+          <h3>Editais 2026</h3>
+          <p>Mestrado, Doutorado e Alunos Especiais. Inscrições abertas de 01 a 30 de junho de 2026.</p>
+          <span class="saiba-mais">Saiba mais →</span>
+        </div>
+      </a>
+      <a href="#" class="destaque-card">
+        <div class="destaque-img">
+          <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80" alt="Linhas de Pesquisa">
+          <div class="destaque-cat">Linhas de Pesquisa</div>
+        </div>
+        <div class="destaque-body">
+          <h3>Conheça nossas linhas</h3>
+          <p>Áreas de concentração e projetos que impulsionam a ciência ambiental na Amazônia.</p>
+          <span class="saiba-mais">Saiba mais →</span>
+        </div>
+      </a>
+      <a href="#" class="destaque-card">
+        <div class="destaque-img">
+          <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=400&q=80" alt="Laboratórios">
+          <div class="destaque-cat">Infraestrutura</div>
+        </div>
+        <div class="destaque-body">
+          <h3>Nossos Laboratórios</h3>
+          <p>Estrutura moderna com 8 laboratórios e coleções científicas para pesquisas de ponta.</p>
+          <span class="saiba-mais">Saiba mais →</span>
+        </div>
+      </a>
+      <a href="#" class="destaque-card">
+        <div class="destaque-img">
+          <img src="https://images.unsplash.com/photo-1531379410502-63bfe8cdaf6f?w=400&q=80" alt="Extensão">
+          <div class="destaque-cat">Extensão</div>
+        </div>
+        <div class="destaque-body">
+          <h3>Ações que transformam</h3>
+          <p>Projetos de extensão e inserção social que geram impacto positivo nas comunidades amazônicas.</p>
+          <span class="saiba-mais">Saiba mais →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- NOTÍCIAS + EVENTOS -->
+<section class="noticias-eventos">
+  <div class="container">
+    <div class="layout">
+      <!-- Notícias -->
+      <div>
+        <div class="sec-header">
+          <h2>Notícias</h2>
+          <div class="linha"></div>
+        </div>
+        <a href="#" class="noticia-destaque">
+          <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&q=80" alt="Expedição científica">
+          <div class="noticia-destaque-body">
+            <div class="meta"><span>Pesquisa</span> 12 MAI 2026</div>
+            <h3>PPGCA promove expedição científica na Floresta Nacional de Caxiuanã</h3>
+            <p>Atividade integrou docentes e discentes em coleta de dados sobre biodiversidade e mudanças ambientais na região.</p>
+            <span class="saiba-mais" style="margin-top:10px">Leia mais →</span>
+          </div>
+        </a>
+        <div class="noticias-mini">
+          <a href="#" class="noticia-mini">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="">
+            <div class="noticia-mini-body">
+              <div class="meta"><span>Institucional</span> 07 MAI 2026</div>
+              <h4>Docente do PPGCA publica artigo em revista internacional de alto impacto</h4>
+            </div>
+          </a>
+          <a href="#" class="noticia-mini">
+            <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=200&q=80" alt="">
+            <div class="noticia-mini-body">
+              <div class="meta"><span>Defesas</span> 02 MAI 2026</div>
+              <h4>Defesas de dissertação marcam início do semestre 2026.1 com pesquisas sobre ecossistemas</h4>
+            </div>
+          </a>
+          <a href="#" class="noticia-mini">
+            <img src="https://images.unsplash.com/photo-1604881988758-f76ad2f7aac1?w=200&q=80" alt="">
+            <div class="noticia-mini-body">
+              <div class="meta"><span>Extensão</span> 28 ABR 2026</div>
+              <h4>Projeto de extensão promove educação ambiental em comunidades ribeirinhas do Pará</h4>
+            </div>
+          </a>
+        </div>
+        <a href="#" class="btn-ver-mais">Ver mais notícias →</a>
+      </div>
+
+      <!-- Eventos -->
+      <div>
+        <div class="sec-header">
+          <h2>Próximos Eventos</h2>
+          <div class="linha"></div>
+        </div>
+        <div class="evento">
+          <div class="evento-data"><div class="dia">21</div><div class="mes">MAI</div></div>
+          <div class="evento-body">
+            <div class="evento-tag">Evento Interno</div>
+            <h4>Seminário de Pesquisa do PPGCA</h4>
+            <p>Biodiversidade Amazônica: desafios e perspectivas · Auditório do CCNT · 09h00</p>
+          </div>
+        </div>
+        <div class="evento">
+          <div class="evento-data"><div class="dia">04</div><div class="mes">JUN</div></div>
+          <div class="evento-body">
+            <div class="evento-tag defesa">Defesa</div>
+            <h4>Defesa de Dissertação</h4>
+            <p>Ana Paula Ferreira da Silva · Sala de Reuniões do PPGCA · 14h00</p>
+          </div>
+        </div>
+        <div class="evento">
+          <div class="evento-data"><div class="dia">10</div><div class="mes">JUN</div></div>
+          <div class="evento-body">
+            <div class="evento-tag aberto">Evento Aberto</div>
+            <h4>Webinário: Soluções baseadas na natureza para cidades amazônicas</h4>
+            <p>Online (YouTube) · 15h00</p>
+          </div>
+        </div>
+        <div class="evento">
+          <div class="evento-data"><div class="dia">18</div><div class="mes">JUN</div></div>
+          <div class="evento-body">
+            <div class="evento-tag defesa">Defesa</div>
+            <h4>Defesa de Tese — João Victor Lima dos Santos</h4>
+            <p>Auditório do CCNT/UEPA · 09h00</p>
+          </div>
+        </div>
+        <div class="evento">
+          <div class="evento-data"><div class="dia">01–30</div><div class="mes">JUN</div></div>
+          <div class="evento-body">
+            <div class="evento-tag edital">Edital</div>
+            <h4>Inscrições — Processo Seletivo 2026</h4>
+            <p>Mestrado e Doutorado · Online</p>
+          </div>
+        </div>
+        <a href="#" class="btn-calendario">VER CALENDÁRIO COMPLETO</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFIS DE ACESSO RÁPIDO -->
+<section class="perfis" style="padding: 56px 0;">
+  <div class="container">
+    <div style="display:flex; align-items:center; gap:48px;">
+      <div class="perfis-texto">
+        <h2>Como posso ajudar você?</h2>
+        <p>Acesso direto por perfil</p>
+      </div>
+      <div class="perfis-grid" style="flex:1;">
+        <a href="#" class="perfil-btn">
+          <svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z"/></svg>
+          <h3>Sou Candidato</h3>
+          <p>Processo seletivo, editais e informações para ingresso</p>
+        </a>
+        <a href="#" class="perfil-btn">
+          <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          <h3>Sou Discente</h3>
+          <p>Área do aluno, matrícula, formulários e calendário</p>
+        </a>
+        <a href="#" class="perfil-btn">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <h3>Sou Docente</h3>
+          <p>Documentos, relatórios Sucupira e colegiado</p>
+        </a>
+        <a href="#" class="perfil-btn">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          <h3>Sou Egresso</h3>
+          <p>Atualize seu cadastro e acesse o Observatório de Egressos</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÉTRICAS -->
+<div class="marca-num">
+  <div class="inner">
+    <div class="marca-texto">
+      <h2>Ciência e compromisso com a Amazônia</h2>
+      <p>Formação qualificada e produção de conhecimento para a conservação e o desenvolvimento sustentável.</p>
+    </div>
+    <div class="marca-stat">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      <div class="n">+17<span></span></div>
+      <div class="l">Docentes credenciados</div>
+    </div>
+    <div class="marca-stat">
+      <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      <div class="n">+300<span></span></div>
+      <div class="l">Discentes formados</div>
+    </div>
+    <div class="marca-stat">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <div class="n">+500<span></span></div>
+      <div class="l">Publicações nos últimos 5 anos</div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="newsletter">
+  <div class="inner">
+    <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    <h3>Fique por dentro das novidades do PPGCA!</h3>
+    <p>Assine nossa newsletter e receba notícias e informações sobre eventos, editais e pesquisas.</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="Seu e-mail">
+      <button type="button">ASSINAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+        <img src="logo_UEPA.jpg" alt="Brasão UEPA" style="height:52px; width:auto; object-fit:contain; filter:brightness(0) invert(1); opacity:.85;">
+        <img src="Logo_ciencias_ambientais.jpg" alt="PPGCA UEPA" style="height:44px; width:auto; object-fit:contain; filter:brightness(0) invert(1); opacity:.9;">
+      </div>
+      <p>Formação qualificada e produção de conhecimento para a conservação e o desenvolvimento sustentável da Amazônia.</p>
+      <div class="footer-social" style="margin-top:20px;">
+        <a href="#" title="Instagram">&#x1F4F7;</a>
+        <a href="#" title="Facebook">f</a>
+        <a href="#" title="YouTube">▶</a>
+        <a href="#" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <div class="info-item">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.64A2 2 0 012 .18h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14z"/></svg>
+        (91) 3131-1914
+      </div>
+      <div class="info-item">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        ppgca@uepa.br
+      </div>
+      <div class="info-item">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        ppgca.secretaria@uepa.br
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Endereço</h4>
+      <div class="info-item">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>Centro de Ciências Naturais e Tecnologia — CCNT<br>Tv. Enéas Pinheiro, 2626 - Marco<br>Belém - PA, 66095-100<br><br>Seg. a sexta: 08h às 17h</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Acesso Rápido</h4>
+      <ul>
+        <li><a href="#">Portal da UEPA</a></li>
+        <li><a href="#">CAPES</a></li>
+        <li><a href="#">Plataforma Sucupira</a></li>
+        <li><a href="#">SEI / UEPA</a></li>
+        <li><a href="#">Lattes CNPq</a></li>
+        <li><a href="#">Repositório UEPA</a></li>
+        <li><a href="#">Mapa do Site</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 PPGCA/UEPA — Todos os direitos reservados.</span>
+    <div class="footer-bottom-links">
+      <a href="#">Mapa do Site</a>
+      <a href="#">Política de Privacidade</a>
+      <a href="#">Acessibilidade</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

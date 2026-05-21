@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linhas de Pesquisa — PPGCA/UEPA</title>
+<link rel="stylesheet" href="ppgca-base.css">
+<style>
+  .filtros-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+  .filtro-tab {
+    padding: 9px 20px; border-radius: 50px; font-size: 13px; font-weight: 600;
+    border: 2px solid var(--borda); background: var(--branco); color: var(--cinza-medio);
+    cursor: pointer; transition: all .2s;
+  }
+  .filtro-tab.ativo, .filtro-tab:hover { background: var(--verde); color: #fff; border-color: var(--verde); }
+
+  .linha-card {
+    border-radius: 14px; overflow: hidden; border: 1px solid var(--borda);
+    margin-bottom: 32px; transition: box-shadow .2s;
+  }
+  .linha-card:hover { box-shadow: var(--sombra); }
+  .linha-card-header {
+    position: relative; height: 220px; overflow: hidden;
+  }
+  .linha-card-header img { width: 100%; height: 100%; object-fit: cover; }
+  .linha-card-header-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(46,90,28,.92) 0%, rgba(46,90,28,.4) 60%, transparent 100%);
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+  }
+  .linha-num { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #9ed45c; margin-bottom: 4px; }
+  .linha-titulo { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: #fff; }
+  .linha-card-body { padding: 28px; }
+  .linha-desc { font-size: 15px; color: var(--cinza-medio); line-height: 1.8; margin-bottom: 24px; }
+
+  .areas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+  .area-tag {
+    background: var(--fundo-alt); border: 1px solid var(--borda); border-radius: 6px;
+    padding: 8px 12px; font-size: 12px; color: var(--verde-escuro); font-weight: 500;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .area-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--verde); flex-shrink: 0; }
+
+  .docentes-vinculados { margin-top: 20px; }
+  .docentes-vinculados h4 { font-size: 13px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .docente-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .docente-chip {
+    display: flex; align-items: center; gap: 8px; padding: 6px 14px;
+    background: var(--branco); border: 1px solid var(--borda); border-radius: 50px;
+    font-size: 13px; color: var(--cinza-texto); text-decoration: none;
+    transition: border-color .2s, color .2s;
+  }
+  .docente-chip:hover { border-color: var(--verde); color: var(--verde); }
+  .docente-chip .avatar {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--fundo-alt); display: flex; align-items: center; justify-content: center;
+  }
+  .docente-chip .avatar svg { width: 14px; height: 14px; stroke: var(--verde); fill: none; }
+
+  .impacto-banner {
+    background: var(--fundo-alt); border: 1px solid var(--borda); border-radius: 12px;
+    padding: 28px 32px; display: flex; align-items: center; gap: 24px; margin-top: 40px;
+  }
+  .impacto-icon { width: 64px; height: 64px; background: var(--verde-claro); border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .impacto-icon svg { width: 32px; height: 32px; stroke: var(--verde); fill: none; }
+  .impacto-texto h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 6px; }
+  .impacto-texto p { font-size: 14px; color: var(--cinza-medio); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=1600&q=80');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Home</a> › <a href="#">Pesquisa</a> › <span>Linhas de Pesquisa</span></div>
+      <h1>Linhas de Pesquisa</h1>
+      <p>As linhas organizam as atividades científicas em grandes áreas temáticas que orientam dissertações, teses e projetos.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="layout-full">
+
+    <div class="filtros-tabs">
+      <button class="filtro-tab ativo">Todas</button>
+      <button class="filtro-tab">Biodiversidade e Conservação</button>
+      <button class="filtro-tab">Sociedade, Ambiente e Desenvolvimento</button>
+      <button class="filtro-tab">Tecnologias Ambientais</button>
+      <button class="filtro-tab">Recursos Naturais e Sustentabilidade</button>
+    </div>
+
+    <!-- LINHA 1 -->
+    <div class="linha-card">
+      <div class="linha-card-header">
+        <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&q=80" alt="Meio Ambiente e Sustentabilidade">
+        <div class="linha-card-header-overlay">
+          <div class="linha-num">Linha de Pesquisa 1</div>
+          <div class="linha-titulo">Meio Ambiente e Sustentabilidade</div>
+        </div>
+      </div>
+      <div class="linha-card-body">
+        <p class="linha-desc">Aborda a gestão dos recursos naturais, os impactos das atividades humanas sobre o ambiente amazônico, políticas públicas ambientais, educação ambiental, economia ecológica, saúde e meio ambiente, logística verde, poluição e tecnologias ambientais. Integra conhecimentos das ciências sociais aplicadas, humanas, exatas e da vida para propor soluções sustentáveis contextualizadas à realidade amazônica.</p>
+
+        <h4 style="font-size:13px;font-weight:700;color:var(--verde-escuro);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px;">Áreas de interesse</h4>
+        <div class="areas-grid">
+          <div class="area-tag">Gestão ambiental</div>
+          <div class="area-tag">Educação ambiental</div>
+          <div class="area-tag">Políticas públicas</div>
+          <div class="area-tag">Economia ecológica</div>
+          <div class="area-tag">Saúde e meio ambiente</div>
+          <div class="area-tag">Logística verde</div>
+          <div class="area-tag">Poluição ambiental</div>
+          <div class="area-tag">Tecnologias ambientais</div>
+          <div class="area-tag">Sustentabilidade urbana</div>
+        </div>
+
+        <div class="docentes-vinculados">
+          <h4>Docentes vinculados</h4>
+          <div class="docente-chips">
+            <a href="docentes.html" class="docente-chip">
+              <div class="avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              Prof. Dr. José Danilo Jr.
+            </a>
+            <a href="docentes.html" class="docente-chip">
+              <div class="avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              Profa. Dra. Ana Carolina Corrêa
+            </a>
+            <a href="docentes.html" class="docente-chip">
+              <div class="avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              Prof. Dr. Gustavo Claudiano
+            </a>
+            <a href="docentes.html" class="docente-chip">
+              <div class="avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              Profa. Dra. Juliana Costa
+            </a>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;display:flex;gap:12px;">
+          <a href="#" class="btn btn-primary btn-sm">Ver projetos em andamento</a>
+          <a href="#" class="btn btn-outline btn-sm">Dissertações e teses</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINHA 2 -->
+    <div class="linha-card">
+      <div class="linha-card-header">
+        <img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1200&q=80" alt="Estudos de Ecossistemas Amazônicos">
+        <div class="linha-card-header-overlay">
+          <div class="linha-num">Linha de Pesquisa 2</div>
+          <div class="linha-titulo">Estudos de Ecossistemas Amazônicos</div>
+        </div>
+      </div>
+      <div class="linha-card-body">
+        <p class="linha-desc">Concentra-se no funcionamento, biodiversidade e conservação dos ecossistemas amazônicos — florestais, aquáticos, costeiros e agroecossistemas —, incluindo monitoramento ambiental, biodiversidade, agroecologia, recursos hídricos, geoprocessamento, mudanças climáticas, epidemiologia de doenças tropicais e modelagem ambiental. Articula ciência básica e aplicada para compreensão e gestão da heterogeneidade ecológica da região.</p>
+
+        <h4 style="font-size:13px;font-weight:700;color:var(--verde-escuro);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px;">Áreas de interesse</h4>
+        <div class="areas-grid">
+          <div class="area-tag">Biodiversidade</div>
+          <div class="area-tag">Ecossistemas aquáticos</div>
+          <div class="area-tag">Recursos hídricos</div>
+          <div class="area-tag">Geoprocessamento</div>
+          <div class="area-tag">Mudanças climáticas</div>
+          <div class="area-tag">Modelagem ambiental</div>
+          <div class="area-tag">Agroecologia</div>
+          <div class="area-tag">Epidemiologia tropical</div>
+          <div class="area-tag">Sensoriamento remoto</div>
+        </div>
+
+        <div class="docentes-vinculados">
+          <h4>Docentes vinculados</h4>
+          <div class="docente-chips">
+            <a href="docentes.html" class="docente-chip">
+              <div class="avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              Profa. Dra. Maurea Silva de Jesus
+            </a>
+            <a href="docentes.html" class="docente-chip">
+              <div class="avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              Prof. Dr. Leandro Júnior da Silva
+            </a>
+            <a href="docentes.html" class="docente-chip">
+              <div class="avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              Profa. Dra. Roberta Rodrigues Coelho
+            </a>
+            <a href="docentes.html" class="docente-chip">
+              <div class="avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              Prof. Dr. Vladimir de Souza
+            </a>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;display:flex;gap:12px;">
+          <a href="#" class="btn btn-primary btn-sm">Ver projetos em andamento</a>
+          <a href="#" class="btn btn-outline btn-sm">Dissertações e teses</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- BANNER IMPACTO -->
+    <div class="impacto-banner">
+      <div class="impacto-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v4l3 3"/></svg>
+      </div>
+      <div class="impacto-texto" style="flex:1;">
+        <h3>Pesquisa com impacto na Amazônia</h3>
+        <p>Nossas linhas de pesquisa promovem a integração entre ciência, sociedade e natureza para enfrentar os desafios ambientais da região amazônica.</p>
+      </div>
+      <a href="producao.html" class="btn btn-primary">CONHEÇA NOSSOS PROJETOS</a>
+    </div>
+
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script>const PAGINA_ATIVA = 'ensino';</script>
+<script src="ppgca-components.js"></script>
+<script>
+  document.querySelectorAll('.filtro-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filtro-tab').forEach(b => b.classList.remove('ativo'));
+      btn.classList.add('ativo');
+    });
+  });
+</script>
+</body>
+</html>

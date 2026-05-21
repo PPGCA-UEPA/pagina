@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infraestrutura e Laboratórios — PPGCA/UEPA</title>
+<link rel="stylesheet" href="ppgca-base.css">
+<style>
+  .labs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 48px; }
+  .lab-card { background: var(--branco); border: 1px solid var(--borda); border-radius: 12px; overflow: hidden; transition: box-shadow .2s, border-color .2s; display: flex; flex-direction: column; }
+  .lab-card:hover { box-shadow: var(--sombra); border-color: var(--verde-claro); }
+  .lab-card-header { background: var(--fundo-alt); padding: 16px 20px; border-bottom: 1px solid var(--borda); display: flex; gap: 14px; align-items: flex-start; }
+  .lab-icone { width: 44px; height: 44px; border-radius: 10px; background: var(--verde-claro); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .lab-icone svg { width: 22px; height: 22px; stroke: var(--verde-escuro); fill: none; }
+  .lab-header-texto .sigla { font-size: 11px; font-weight: 700; color: var(--verde); letter-spacing: .5px; margin-bottom: 2px; }
+  .lab-header-texto h3 { font-size: 14px; font-weight: 700; color: var(--verde-escuro); line-height: 1.4; }
+  .lab-card-body { padding: 16px 20px; flex: 1; }
+  .coord-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--cinza-medio); margin-bottom: 4px; }
+  .coord-nome { font-size: 13px; font-weight: 600; color: var(--cinza-texto); line-height: 1.5; }
+  .lab-desc { font-size: 13px; color: var(--cinza-medio); line-height: 1.6; margin-top: 10px; }
+
+  .colecoes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 48px; }
+  .colecao-card { background: var(--verde-escuro); border-radius: 12px; padding: 28px; color: #fff; display: flex; gap: 16px; }
+  .colecao-icon { width: 48px; height: 48px; background: rgba(158,212,92,.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .colecao-icon svg { width: 26px; height: 26px; stroke: #9ed45c; fill: none; }
+  .colecao-info h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .colecao-info .coord { font-size: 12px; color: rgba(255,255,255,.6); margin-bottom: 8px; }
+  .colecao-info p { font-size: 13px; color: rgba(255,255,255,.75); line-height: 1.5; }
+
+  .espacos-lista { display: flex; flex-direction: column; }
+  .espaco-item { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--borda); align-items: flex-start; }
+  .espaco-item:last-child { border-bottom: none; }
+  .espaco-icon { width: 42px; height: 42px; background: var(--fundo-alt); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .espaco-icon svg { width: 20px; height: 20px; stroke: var(--verde); fill: none; }
+  .espaco-info h4 { font-size: 14px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 2px; }
+  .espaco-info p { font-size: 13px; color: var(--cinza-medio); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1600&q=80');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Home</a> › <a href="ensino-pesquisa.html">Ensino e Pesquisa</a> › <span>Infraestrutura</span></div>
+      <h1>Infraestrutura e Laboratórios</h1>
+      <p>Espaços de pesquisa, laboratórios, coleções científicas e equipamentos do PPGCA.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="layout-sidebar">
+
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <div class="sidebar-nav-title">Navegação</div>
+        <a href="#laboratorios" class="ativo">Laboratórios ›</a>
+        <a href="#colecoes">Coleções Científicas</a>
+        <a href="#espacos">Espaços Acadêmicos</a>
+      </nav>
+      <div class="sidebar-card" style="margin-top:20px;">
+        <h4>Acesso e agendamento</h4>
+        <ul>
+          <li><a href="#" style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--cinza-medio);text-decoration:none;padding:6px 0;border-bottom:1px solid var(--borda);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--verde)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>
+            Normas de uso dos laboratórios
+          </a></li>
+          <li><a href="mailto:ppgca@uepa.br" style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--cinza-medio);text-decoration:none;padding:6px 0;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--verde)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Agendamento via secretaria
+          </a></li>
+        </ul>
+      </div>
+      <div class="destaque-lateral" style="margin-top:20px;">
+        <h4>Em números</h4>
+        <div class="destaque-lateral-item">
+          <div class="destaque-lateral-icon"><svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+          <div><h5>10 laboratórios</h5><p>Ativos e equipados</p></div>
+        </div>
+        <div class="destaque-lateral-item">
+          <div class="destaque-lateral-icon"><svg viewBox="0 0 24 24"><path d="M12 22V12m0 0C12 6 7 3 7 3s5 1 5 7m0-7c0 6 5 9 5 9s-5-2-5-9"/></svg></div>
+          <div><h5>2 coleções científicas</h5><p>Herbário e Coleção Zoológica</p></div>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+
+      <!-- LABORATÓRIOS -->
+      <section id="laboratorios">
+        <h2 class="content-title">Laboratórios</h2>
+        <div class="content-title-line"></div>
+        <div class="labs-grid">
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icone"><svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+              <div class="lab-header-texto"><div class="sigla">LCA</div><h3>Laboratório de Ciências Ambientais</h3></div>
+            </div>
+            <div class="lab-card-body">
+              <div class="coord-label">Coordenador</div>
+              <div class="coord-nome">Prof. Dr. Altem Nascimento Pontes</div>
+              <p class="lab-desc">Pesquisa interdisciplinar em ciências ambientais, com foco em educação ambiental, sustentabilidade e análise socioambiental.</p>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icone"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+              <div class="lab-header-texto"><div class="sigla">LMCA</div><h3>Laboratório de Monitoramento e Conservação Ambiental</h3></div>
+            </div>
+            <div class="lab-card-body">
+              <div class="coord-label">Coordenadora</div>
+              <div class="coord-nome">Profa. Dra. Ana Cláudia Caldeira Tavares Martins</div>
+              <p class="lab-desc">Monitoramento de ecossistemas e análise de indicadores ambientais para subsidiar estratégias de conservação na Amazônia.</p>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icone"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div class="lab-header-texto"><div class="sigla">LBA</div><h3>Laboratório de Biodiversidade e Agroecologia</h3></div>
+            </div>
+            <div class="lab-card-body">
+              <div class="coord-label">Coordenadores</div>
+              <div class="coord-nome">Prof. Dr. Manoel Tavares de Paula<br>Prof. Dr. Alfredo Kingo Oyama Homma</div>
+              <p class="lab-desc">Pesquisa em biodiversidade agrícola, sistemas agroflorestais, recursos genéticos vegetais e economia extrativa amazônica.</p>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icone"><svg viewBox="0 0 24 24"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0014 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 01-11.91 4.97"/></svg></div>
+              <div class="lab-header-texto"><div class="sigla">LQAA</div><h3>Laboratório de Qualidade de Água da Amazônia</h3></div>
+            </div>
+            <div class="lab-card-body">
+              <div class="coord-label">Coordenadora</div>
+              <div class="coord-nome">Profa. Dra. Hebe Morganne Campos Ribeiro</div>
+              <p class="lab-desc">Análise físico-química e microbiológica de corpos d'água amazônicos, com foco em qualidade e conservação dos recursos hídricos.</p>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icone"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+              <div class="lab-header-texto"><div class="sigla">LEMA</div><h3>Laboratório de Espectroscopia e Modelagem Ambiental</h3></div>
+            </div>
+            <div class="lab-card-body">
+              <div class="coord-label">Coordenador</div>
+              <div class="coord-nome">Prof. Dr. Carlos Elias de Souza Braga</div>
+              <p class="lab-desc">Aplicação de espectroscopia e modelagem computacional para análise de processos e mudanças ambientais na Amazônia.</p>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icone"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+              <div class="lab-header-texto"><div class="sigla">LSMA</div><h3>Laboratório de Saúde e Meio Ambiente</h3></div>
+            </div>
+            <div class="lab-card-body">
+              <div class="coord-label">Coordenadores</div>
+              <div class="coord-nome">Profa. Dra. Cléa Nazaré Carneiro Bichara<br>Prof. Dr. José Augusto Carvalho de Araújo</div>
+              <p class="lab-desc">Interface entre saúde pública e meio ambiente, com pesquisas em doenças tropicais, epidemiologia e fatores ambientais de risco.</p>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icone"><svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+              <div class="lab-header-texto"><div class="sigla">LQPN</div><h3>Laboratório de Química de Produtos Naturais</h3></div>
+            </div>
+            <div class="lab-card-body">
+              <div class="coord-label">Coordenador</div>
+              <div class="coord-nome">Prof. Dr. Pablo Luis Baia Figueiredo</div>
+              <p class="lab-desc">Isolamento, caracterização e análise de compostos bioativos de espécies da flora amazônica, com foco em bioeconomia e uso sustentável.</p>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icone"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+              <div class="lab-header-texto"><div class="sigla">LIPA</div><h3>Laboratório de Informática e Pesquisa Avançada</h3></div>
+            </div>
+            <div class="lab-card-body">
+              <div class="coord-label">Coordenação</div>
+              <div class="coord-nome">Coordenação do PPGCA</div>
+              <p class="lab-desc">Suporte computacional para análises estatísticas, geoprocessamento, modelagem ambiental e pesquisas que demandam infraestrutura de TI.</p>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icone"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+              <div class="lab-header-texto"><div class="sigla">LEPM</div><h3>Laboratório de Ensino e Produção Multimídia</h3></div>
+            </div>
+            <div class="lab-card-body">
+              <div class="coord-label">Coordenação</div>
+              <div class="coord-nome">Coordenação do PPGCA</div>
+              <p class="lab-desc">Produção de materiais didáticos e científicos em formato multimídia, apoiando as atividades de ensino e divulgação científica do programa.</p>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icone"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+              <div class="lab-header-texto"><div class="sigla">LEGA</div><h3>Laboratório de Estudos e Pesquisas Geoambientais da Amazônia</h3></div>
+            </div>
+            <div class="lab-card-body">
+              <div class="coord-label">Coordenadora</div>
+              <div class="coord-nome">Profa. Dra. Norma Ely Santos Beltrão</div>
+              <p class="lab-desc">Geoprocessamento, sensoriamento remoto, ciência de dados espaciais e análise ambiental por imagens de satélite aplicados à Amazônia.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- COLEÇÕES CIENTÍFICAS -->
+      <section id="colecoes" style="padding-top:40px;border-top:1px solid var(--borda);">
+        <h2 class="content-title">Coleções Científicas</h2>
+        <div class="content-title-line"></div>
+        <div class="colecoes-grid">
+          <div class="colecao-card">
+            <div class="colecao-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v4l3 3"/></svg></div>
+            <div class="colecao-info">
+              <h3>Coleção Zoológica</h3>
+              <p class="coord">Coordenadora: Profa. Dra. Ana Lúcia Nunes Gutjahr</p>
+              <p>Acervo de espécimes da fauna amazônica para referência taxonômica, pesquisas em biodiversidade e atividades de ensino. Suporte a dissertações e teses em zoologia e ecologia animal.</p>
+            </div>
+          </div>
+          <div class="colecao-card">
+            <div class="colecao-icon"><svg viewBox="0 0 24 24"><path d="M12 22V12m0 0C12 6 7 3 7 3s5 1 5 7m0-7c0 6 5 9 5 9s-5-2-5-9"/></svg></div>
+            <div class="colecao-info">
+              <h3>Herbário MFS</h3>
+              <p class="coord">Coordenadora: Profa. Dra. Flávia Cristina Araújo Lucas</p>
+              <p>Coleção botânica com exsicatas da flora amazônica, servindo de referência para estudos de taxonomia vegetal, etnobotânica e ecologia de plantas. Integra a rede nacional de herbários.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ESPAÇOS ACADÊMICOS -->
+      <section id="espacos" style="margin-top:48px;padding-top:40px;border-top:1px solid var(--borda);">
+        <h2 class="content-title">Espaços Acadêmicos</h2>
+        <div class="content-title-line"></div>
+        <div class="espacos-lista">
+          <div class="espaco-item">
+            <div class="espaco-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div class="espaco-info">
+              <h4>Salas de Pesquisa e Orientação</h4>
+              <p>Salas individuais e coletivas para desenvolvimento de atividades de pesquisa e reuniões de orientação, com acesso à internet de alta velocidade e climatização.</p>
+            </div>
+          </div>
+          <div class="espaco-item">
+            <div class="espaco-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+            <div class="espaco-info">
+              <h4>Auditório do CCNT</h4>
+              <p>Espaço com capacidade para 200 pessoas, equipado com sistema de projeção, som e climatização, utilizado para defesas, seminários e eventos científicos.</p>
+            </div>
+          </div>
+          <div class="espaco-item">
+            <div class="espaco-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+            <div class="espaco-info">
+              <h4>Biblioteca Setorial</h4>
+              <p>Acervo especializado em Ciências Ambientais, com acesso ao Portal de Periódicos CAPES e bases de dados científicas nacionais e internacionais.</p>
+            </div>
+          </div>
+          <div class="espaco-item">
+            <div class="espaco-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div class="espaco-info">
+              <h4>Salas de Defesa e Reunião</h4>
+              <p>Salas equipadas para bancas de defesa de dissertações e teses, reuniões do colegiado e seminários internos do programa.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script>const PAGINA_ATIVA = 'ensino';</script>
+<script src="ppgca-components.js"></script>
+</body>
+</html>

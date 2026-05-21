@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extensão e Internacionalização — PPGCA/UEPA</title>
+<link rel="stylesheet" href="ppgca-base.css">
+<style>
+  .secao { margin-bottom: 56px; }
+  .secao-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .secao-header-icon { width: 48px; height: 48px; background: var(--fundo-alt); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .secao-header-icon svg { width: 26px; height: 26px; stroke: var(--verde); fill: none; }
+  .secao-header-texto h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--verde-escuro); }
+  .secao-header-texto p { font-size: 14px; color: var(--cinza-medio); }
+
+  /* ── EVENTOS ACADÊMICOS ─────────────────────────────── */
+  .eventos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .evento-card {
+    border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--borda);
+    display: flex; flex-direction: column;
+    transition: box-shadow .2s, border-color .2s;
+    background: var(--branco);
+  }
+  .evento-card:hover { box-shadow: var(--sombra); border-color: var(--verde-claro); }
+
+  /* Imagem de capa */
+  .evento-card-img {
+    height: 180px; overflow: hidden; position: relative; flex-shrink: 0;
+  }
+  .evento-card-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .4s;
+    display: block;
+  }
+  .evento-card:hover .evento-card-img img { transform: scale(1.04); }
+
+  /* Cabeçalho (sigla + título) sobre fundo verde-escuro */
+  .evento-card-header { background: var(--verde-escuro); padding: 16px 20px; }
+  .evento-card-header .sigla {
+    font-size: 10px; color: #9ed45c; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px;
+  }
+  .evento-card-header h3 {
+    font-family: 'Playfair Display', serif; font-size: 16px;
+    font-weight: 700; color: #fff; line-height: 1.35; margin: 0;
+  }
+
+  /* Faixa de data/local — verde institucional legível */
+  .evento-card-meta {
+    background: #1a6b3a;          /* verde institucional sólido */
+    padding: 10px 20px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .evento-card-meta span {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; color: #fff; font-weight: 500;
+  }
+  .evento-card-meta svg { width: 13px; height: 13px; stroke: #9ed45c; fill: none; flex-shrink: 0; }
+
+  /* Corpo com texto truncado */
+  .evento-card-body { padding: 16px 20px; flex: 1; }
+  .evento-card-resumo {
+    font-size: 13px; color: var(--cinza-medio); line-height: 1.65;
+    display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Texto completo oculto por padrão */
+  .evento-card-full {
+    font-size: 13px; color: var(--cinza-medio); line-height: 1.65;
+    display: none; margin-top: 10px;
+  }
+  .evento-card-full p { margin-bottom: 10px; }
+  .evento-card-full p:last-child { margin-bottom: 0; }
+
+  /* Rodapé com link "Saiba mais" */
+  .evento-card-footer { padding: 0 20px 18px; }
+  .evento-saiba-mais {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 13px; font-weight: 600; color: var(--verde);
+    text-decoration: none; margin-top: 10px;
+    transition: color .15s;
+    background: none; border: none; cursor: pointer; padding: 0;
+    font-family: inherit;
+  }
+  .evento-saiba-mais:hover { color: var(--verde-escuro); }
+  .evento-saiba-mais svg { width: 14px; height: 14px; stroke: currentColor; fill: none; transition: transform .2s; }
+  .evento-saiba-mais.aberto svg { transform: rotate(180deg); }
+
+  /* ── EXTENSÃO ────────────────────────────────────────── */
+  .extensao-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .extensao-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--borda); transition: box-shadow .2s; }
+  .extensao-card:hover { box-shadow: var(--sombra); }
+  .extensao-img { height: 160px; overflow: hidden; }
+  .extensao-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .extensao-card:hover .extensao-img img { transform: scale(1.05); }
+  .extensao-body { padding: 18px; }
+  .extensao-body h3 { font-size: 15px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 6px; }
+  .extensao-body p { font-size: 13px; color: var(--cinza-medio); line-height: 1.5; margin-bottom: 10px; }
+  .extensao-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ext-tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: var(--fundo-alt); color: var(--verde-escuro); }
+
+  /* ── CONTADORES ──────────────────────────────────────── */
+  .stats-banner { background: var(--verde-escuro); border-radius: 12px; padding: 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 40px; }
+  .stat-banner-item { text-align: center; padding: 0 20px; border-right: 1px solid rgba(255,255,255,.15); }
+  .stat-banner-item:last-child { border-right: none; }
+  .stat-banner-item svg { width: 28px; height: 28px; stroke: #9ed45c; fill: none; margin-bottom: 8px; }
+  .stat-banner-item .n { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 900; color: #fff; line-height: 1; }
+  .stat-banner-item .l { font-size: 12px; color: rgba(255,255,255,.6); margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+
+  /* ── INTERNACIONALIZAÇÃO ─────────────────────────────── */
+  .int-intro { font-size: 15px; color: var(--cinza-medio); line-height: 1.75; margin-bottom: 32px; max-width: 820px; }
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 2px; background: var(--verde-claro); }
+  .tl-item { position: relative; margin-bottom: 36px; }
+  .tl-dot { position: absolute; left: -24px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--verde); border: 3px solid var(--branco); box-shadow: 0 0 0 2px var(--verde); }
+  .tl-card { background: var(--branco); border: 1px solid var(--borda); border-radius: 12px; padding: 20px 24px; transition: box-shadow .2s, border-color .2s; }
+  .tl-card:hover { box-shadow: var(--sombra); border-color: var(--verde-claro); }
+  .tl-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .tl-date { font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--verde); background: var(--fundo-alt); padding: 3px 10px; border-radius: 4px; }
+  .tl-pais { font-size: 11px; color: var(--cinza-medio); font-weight: 600; }
+  .tl-card h3 { font-size: 15px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 8px; line-height: 1.4; }
+  .tl-card p { font-size: 13px; color: var(--cinza-medio); line-height: 1.65; margin-bottom: 10px; }
+  .tl-destaques { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tl-tag { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 4px; background: var(--fundo-alt); color: var(--verde-escuro); text-transform: uppercase; letter-spacing: .5px; }
+  .tl-foto-hint { font-size: 11px; color: var(--verde); background: #f0fae8; border: 1px dashed var(--verde-claro); border-radius: 6px; padding: 6px 12px; margin-top: 12px; display: inline-block; }
+  .poster-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+  .poster-item { background: var(--fundo-alt); border-radius: 8px; padding: 14px 16px; border-left: 3px solid var(--verde); }
+  .poster-item h4 { font-size: 12px; font-weight: 700; color: var(--verde-escuro); margin-bottom: 4px; line-height: 1.4; }
+  .poster-item p { font-size: 11px; color: var(--cinza-medio); line-height: 1.5; margin: 0; }
+  .sdnu-eixos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .eixo-item { background: var(--fundo-alt); border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 8px; }
+  .eixo-n { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--verde-claro); line-height: 1; flex-shrink: 0; }
+  .eixo-item p { font-size: 12px; color: var(--cinza-medio); line-height: 1.45; margin: 0; }
+  .eixo-item strong { color: var(--verde-escuro); display: block; margin-bottom: 2px; }
+
+  @media (max-width: 768px) {
+    .eventos-grid, .extensao-cards { grid-template-columns: 1fr; }
+    .poster-grid, .sdnu-eixos { grid-template-columns: 1fr; }
+    .stats-banner { grid-template-columns: repeat(2, 1fr); }
+    .stat-banner-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,.15); padding: 14px 0; }
+    .stat-banner-item:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1531379410502-63bfe8cdaf6f?w=1600&q=80');"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Home</a> › <span>Extensão e Internacionalização</span></div>
+      <h1>Extensão e Internacionalização</h1>
+      <p>Parcerias que fortalecem a pesquisa, promovem a inovação e geram impacto socioambiental na Amazônia e no mundo.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="layout-full">
+
+    <!-- ══════════════════════════════════════════════════
+         1. EVENTOS ACADÊMICOS
+    ═══════════════════════════════════════════════════ -->
+    <div class="secao" id="eventos">
+      <div class="secao-header">
+        <div class="secao-header-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="secao-header-texto">
+          <h2>Eventos Acadêmicos</h2>
+          <p>Eventos promovidos e apoiados pelo PPGCA para a formação e integração da comunidade acadêmica.</p>
+        </div>
+      </div>
+
+      <div class="eventos-grid">
+
+        <!-- Simpósio -->
+        <div class="evento-card">
+          <div class="evento-card-img">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" alt="Simpósio de Estudos e Pesquisas em Ciências Ambientais na Amazônia">
+          </div>
+          <div class="evento-card-header">
+            <div class="sigla">PPGCA / UEPA</div>
+            <h3>Simpósio de Estudos e Pesquisas em Ciências Ambientais na Amazônia</h3>
+          </div>
+          <div class="evento-card-meta">
+            <span>
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              17 a 19 de novembro — XV edição
+            </span>
+            <span>
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Belém, PA – Brasil
+            </span>
+          </div>
+          <div class="evento-card-body">
+            <p class="evento-card-resumo">O Simpósio de Estudos e Pesquisas em Ciências Ambientais na Amazônia, promovido anualmente pelo PPGCA/UEPA, é um dos principais espaços de divulgação científica e integração acadêmica do Programa. O evento reúne pesquisadores, docentes, discentes e profissionais que atuam em diferentes áreas das Ciências Ambientais.</p>
+            <div class="evento-card-full">
+              <p>Ao longo de suas edições, o Simpósio tem contribuído para ampliar a visibilidade das investigações desenvolvidas no PPGCA, promover a troca de experiências entre grupos de pesquisa e incentivar a formação crítica e qualificada de mestrandos e doutorandos. A programação costuma incluir palestras, mesas-redondas, minicursos e sessões de apresentação de trabalhos, consolidando o evento como um momento estratégico para o avanço da produção científica na região.</p>
+            </div>
+          </div>
+          <div class="evento-card-footer">
+            <button class="evento-saiba-mais" onclick="toggleEvento(this)">
+              Saiba mais
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Escola de Verão -->
+        <div class="evento-card">
+          <div class="evento-card-img">
+            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="Escola de Verão do PPGCA/UEPA">
+          </div>
+          <div class="evento-card-header">
+            <div class="sigla">PPGCA / UEPA</div>
+            <h3>Escola de Verão do PPGCA/UEPA</h3>
+          </div>
+          <div class="evento-card-meta">
+            <span>
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              29 de junho a 3 de julho de 2026
+            </span>
+            <span>
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Belém, PA – Brasil
+            </span>
+          </div>
+          <div class="evento-card-body">
+            <p class="evento-card-resumo">A Escola de Verão do PPGCA/UEPA é uma iniciativa de formação complementar que busca ampliar o acesso ao conhecimento em Ciências Ambientais por meio de minicursos, oficinas e palestras. O evento é aberto ao público interno e externo à Universidade.</p>
+            <div class="evento-card-full">
+              <p>As edições anteriores têm se caracterizado por sua abordagem multidisciplinar, com atividades que vão desde elaboração de projetos de pesquisa e introdução a ferramentas de geotecnologia até discussões sobre políticas ambientais e sustentabilidade. A VIII edição, realizada em 2025, consolidou o evento como um dos principais espaços de formação continuada do Programa, integrando a III Escola de Meio Ambiente e Sustentabilidade. A programação da próxima edição será divulgada em breve.</p>
+            </div>
+          </div>
+          <div class="evento-card-footer">
+            <button class="evento-saiba-mais" onclick="toggleEvento(this)">
+              Saiba mais
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Escola de Inverno -->
+        <div class="evento-card">
+          <div class="evento-card-img">
+            <img src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=800&q=80" alt="Escola de Inverno do PPGCA/UEPA">
+          </div>
+          <div class="evento-card-header">
+            <div class="sigla">PPGCA / UEPA</div>
+            <h3>Escola de Inverno do PPGCA/UEPA</h3>
+          </div>
+          <div class="evento-card-meta">
+            <span>
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Previsão de retorno em 2026
+            </span>
+            <span>
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Belém, PA – Brasil
+            </span>
+          </div>
+          <div class="evento-card-body">
+            <p class="evento-card-resumo">A Escola de Inverno do PPGCA/UEPA é uma iniciativa de formação complementar que, ao longo de suas edições, se consolidou como espaço importante de capacitação, atualização científica e integração entre estudantes, pesquisadores e profissionais das Ciências Ambientais.</p>
+            <div class="evento-card-full">
+              <p>Realizada tradicionalmente em janeiro, a Escola oferece minicursos, oficinas e palestras sobre temas diversos e interdisciplinares, fortalecendo a missão do Programa de promover a difusão do conhecimento e o diálogo com a sociedade. A última edição ocorreu em 2020. A previsão é de que a Escola de Inverno retorne em 2026, retomando seu papel como um dos principais eventos de formação continuada do Programa.</p>
+            </div>
+          </div>
+          <div class="evento-card-footer">
+            <button class="evento-saiba-mais" onclick="toggleEvento(this)">
+              Saiba mais
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /eventos-grid -->
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         2. INSERÇÃO SOCIAL
+    ═══════════════════════════════════════════════════ -->
+    <div class="secao" id="extensao">
+      <div class="secao-header">
+        <div class="secao-header-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="secao-header-texto">
+          <h2>Inserção Social e Extensão</h2>
+          <p>Projetos e ações que promovem transformação social e ambiental.</p>
+        </div>
+      </div>
+      <div class="extensao-cards">
+        <div class="extensao-card">
+          <div class="extensao-img"><img src="https://images.unsplash.com/photo-1531379410502-63bfe8cdaf6f?w=600&q=80" alt="Ciência Cidadã"></div>
+          <div class="extensao-body">
+            <h3>Ciência Cidadã na Amazônia</h3>
+            <p>Envolve comunidades ribeirinhas no monitoramento da qualidade da água e ecossistemas aquáticos.</p>
+            <div class="extensao-tags">
+              <span class="ext-tag">Educação Ambiental</span>
+              <span class="ext-tag">Comunidade Ribeirinha</span>
+            </div>
+          </div>
+        </div>
+        <div class="extensao-card">
+          <div class="extensao-img"><img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80" alt="Restauração"></div>
+          <div class="extensao-body">
+            <h3>Restauração de Áreas Degradadas</h3>
+            <p>Ações de recuperação de áreas degradadas com envolvimento de escolas e comunidades locais.</p>
+            <div class="extensao-tags">
+              <span class="ext-tag">Restauração Ecológica</span>
+              <span class="ext-tag">Ação Local</span>
+            </div>
+          </div>
+        </div>
+        <div class="extensao-card">
+          <div class="extensao-img"><img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80" alt="PPGCA nas Escolas"></div>
+          <div class="extensao-body">
+            <h3>PPGCA nas Escolas</h3>
+            <p>Leva o conhecimento científico para escolas públicas por meio de palestras e oficinas temáticas.</p>
+            <div class="extensao-tags">
+              <span class="ext-tag">Divulgação Científica</span>
+              <span class="ext-tag">Ensino Básico</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         3. INTERNACIONALIZAÇÃO
+    ═══════════════════════════════════════════════════ -->
+    <div class="secao" id="internacional">
+      <div class="secao-header">
+        <div class="secao-header-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+        <div class="secao-header-texto">
+          <h2>Internacionalização</h2>
+          <p>Ações internacionais que ampliam o alcance da pesquisa e fortalecem a formação dos discentes do PPGCA.</p>
+        </div>
+      </div>
+
+      <p class="int-intro">O PPGCA tem avançado consistentemente na inserção internacional de suas atividades acadêmicas e científicas. Nos últimos anos, docentes e discentes do programa participaram de eventos, treinamentos e missões técnicas em diferentes países, estabelecendo interações com instituições de referência mundial nas áreas de geotecnologias, sensoriamento remoto e ciências ambientais. As ações descritas a seguir refletem esse esforço contínuo de internacionalização.</p>
+
+      <div class="timeline">
+
+        <!-- 1. Berlim / Göttingen 2023 -->
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="tl-date">Janeiro de 2023</span>
+              <span class="tl-pais">🇩🇪 Alemanha</span>
+            </div>
+            <h3>SDG Alumni Project — Semana Verde Internacional e Treinamento na Universidade de Göttingen</h3>
+            <p>A Profa. Dra. Norma Beltrão foi selecionada pelo DAAD (Serviço Alemão de Intercâmbio Acadêmico) para participar do programa <em>SDG Alumni Projects</em>, que reúne especialistas do Sul Global em seminários temáticos alinhados aos Objetivos de Desenvolvimento Sustentável da ONU. A participação compreendeu dois momentos complementares:</p>
+            <p><strong>Semana Verde Internacional (IGW) e Fórum Global para Alimentação e Agricultura (GFFA), em Berlim</strong> — evento com mais de 90 anos de história, voltado a alimentação, agricultura e sustentabilidade, que reuniu representantes da política, indústria, ciência e sociedade civil para debater segurança alimentar e políticas agrícolas globais.</p>
+            <p><strong>Treinamento na Universidade de Göttingen (23 a 27 de janeiro)</strong> — o programa incluiu seminários com pesquisadores de referência nas áreas de inventário florestal nacional, certificação florestal (PEFC), restauração de paisagens, política florestal e mudanças climáticas, além de excursões técnicas a florestas manejadas na região de Reinhausen e ao Centro de Tecnologia da Madeira da UGOE. A Profa. Norma Beltrão também apresentou o trabalho <em>"Ecosystem services assessment and mapping in a protected area in the Brazilian Amazon"</em>, gerando intercâmbio técnico com pesquisadores de múltiplos países.</p>
+            <p>A ação abriu perspectivas para a aplicação de novas metodologias em gestão ambiental e sensoriamento remoto nas pesquisas do PPGCA e para o estabelecimento de redes de cooperação com instituições europeias.</p>
+            <div class="tl-destaques">
+              <span class="tl-tag">DAAD</span>
+              <span class="tl-tag">ODS / Sustentabilidade</span>
+              <span class="tl-tag">Manejo Florestal</span>
+              <span class="tl-tag">Serviços Ecossistêmicos</span>
+            </div>
+            <div class="tl-foto-hint">📷 Sugestão: foto da Profa. Norma Beltrão nas excursões técnicas em Göttingen ou no evento em Berlim.</div>
+          </div>
+        </div>
+
+        <!-- 2. Doutorado Sanduíche Porto 2024 -->
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="tl-date">Abril – Julho de 2024</span>
+              <span class="tl-pais">🇵🇹 Portugal</span>
+            </div>
+            <h3>Doutorado Sanduíche — Universidade do Porto (FCUP)</h3>
+            <p>A doutoranda Lianne Borja Pimenta, orientanda da Profa. Dra. Norma Beltrão, foi contemplada com bolsa CAPES de Doutorado Sanduíche para um estágio de pesquisa de quatro meses no Departamento de Geociências, Ambiente e Ordenamento do Território da Faculdade de Ciências da Universidade do Porto (FCUP), sob coorientação da Profa. Dra. Lia Bárbara Cunha Barata Duarte.</p>
+            <p>O estágio focou na aplicação de Análise Hierárquica de Processos (AHP) integrada a Sistemas de Informação Geográfica (SIG) para a identificação de áreas suscetíveis a inundações no município de Ananindeua (PA). Como produto direto da pesquisa, foi elaborado o artigo científico <em>"Integrating GIS and AHP for identifying flood-susceptible areas in the urban zone of Ananindeua, Brazil: a case study"</em>, submetido à revista internacional <em>Land</em>.</p>
+            <p>A experiência fortaleceu a colaboração acadêmica entre a UEPA e a Universidade do Porto, além de ampliar a capacidade analítica da pesquisadora com suporte de especialistas internacionais em geotecnologias.</p>
+            <div class="tl-destaques">
+              <span class="tl-tag">CAPES</span>
+              <span class="tl-tag">Mobilidade Discente</span>
+              <span class="tl-tag">SIG / Geotecnologias</span>
+              <span class="tl-tag">Gestão de Risco</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. ISPRS / SELPER 2024 -->
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="tl-date">Novembro de 2024</span>
+              <span class="tl-pais">🇧🇷 Brasil (evento internacional)</span>
+            </div>
+            <h3>Simpósio Técnico da ISPRS e SELPER — Belém, Pará</h3>
+            <p>O PPGCA marcou presença no Simpósio Técnico da Comissão III da ISPRS (International Society for Photogrammetry and Remote Sensing) e no Simpósio Latino-Americano de Sensoriamento Remoto (SELPER), realizados em Belém entre 4 e 8 de novembro de 2024. O evento, organizado conjuntamente pelo Brasil e pela França no ciclo 2022–2026, concentrou-se em técnicas de sensoriamento remoto, novas missões espaciais (SWOT, BIOMASS e outras) e aplicações em ciências da Terra, clima e meio ambiente — com ênfase especial na Amazônia.</p>
+            <p>A Profa. Dra. Norma Beltrão e seus orientandos de doutorado apresentaram dois trabalhos na modalidade pôster:</p>
+            <div class="poster-grid">
+              <div class="poster-item">
+                <h4>Susceptibility to floods using multicriteria decision geospatial analysis in the Lower Amazon</h4>
+                <p>Dênis Cardoso Gomes, Norma Ely Beltrão, Carla Azevedo Sadeck</p>
+              </div>
+              <div class="poster-item">
+                <h4>Monitoring Vegetation Cover in mining areas in the municipality of Ipixuna do Pará (PA)</h4>
+                <p>Suelen Melo Oliveira, Fernanda Ferreira Machado, Ilale Ferreira Lima, Norma Ely Santos Beltrão</p>
+              </div>
+            </div>
+            <p style="margin-top:12px;">A Profa. Norma Beltrão atuou ainda como Moderadora da Sessão Técnica <em>Urban Areas</em>, coordenando debates sobre dinâmicas urbanas, planejamento territorial e impactos ambientais nas cidades.</p>
+            <div class="tl-destaques">
+              <span class="tl-tag">ISPRS</span>
+              <span class="tl-tag">SELPER</span>
+              <span class="tl-tag">Sensoriamento Remoto</span>
+              <span class="tl-tag">Amazônia</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Visita SDNU China 2025 -->
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="tl-date">Setembro de 2025</span>
+              <span class="tl-pais">🇨🇳 China</span>
+            </div>
+            <h3>Visita Institucional à Faculdade de Geografia e Meio Ambiente — Universidade Normal de Shandong (SDNU)</h3>
+            <p>Em setembro de 2025, uma delegação da UEPA realizou visita institucional à Faculdade de Geografia e Meio Ambiente da Universidade Normal de Shandong (SDNU), conduzida pelas Profas. Dras. Ilma Pastana e Norma Beltrão (PPGCA/UEPA). A SDNU é uma unidade acadêmica de referência internacional nas Ciências da Terra, com mais de 20 plataformas de pesquisa, infraestrutura laboratorial de ponta em análise ambiental, SIG e simulações climáticas, e produção científica que supera 100 artigos em periódicos de alto impacto por ano.</p>
+            <p>A agenda foi marcada pela identificação de interesses comuns e pelo mapeamento de possibilidades de colaboração com pesquisadores de diferentes grupos da faculdade. Foram discutidas cinco frentes temáticas com potencial de aplicação à realidade amazônica:</p>
+            <div class="sdnu-eixos">
+              <div class="eixo-item"><span class="eixo-n">1</span><p><strong>Ciências do Sistema Terrestre e Mudanças Globais</strong>Impactos climáticos, extremos hidrometeorológicos e modelagem de cenários aplicada à Amazônia.</p></div>
+              <div class="eixo-item"><span class="eixo-n">2</span><p><strong>Geografia Humana e Planejamento Regional</strong>Dinâmicas urbanas, redes de cidades e avaliação de políticas públicas.</p></div>
+              <div class="eixo-item"><span class="eixo-n">3</span><p><strong>Geotecnologias</strong>SIG, sensoriamento remoto e cartografia para gestão territorial e ambiental.</p></div>
+              <div class="eixo-item"><span class="eixo-n">4</span><p><strong>Ciência e Engenharia Ambiental</strong>Qualidade da água, solo e ar; controle de poluição; restauração ecológica em áreas degradadas.</p></div>
+            </div>
+            <p style="margin-top:12px;">Entre as modalidades de cooperação discutidas estão: projetos bilaterais com financiamento compartilhado; publicações e dossiês temáticos conjuntos; mobilidade acadêmica de docentes e discentes; compartilhamento de dados e metodologias; e a organização de um evento internacional em Belém em 2026, com participação de pesquisadores da SDNU.</p>
+            <div class="tl-destaques">
+              <span class="tl-tag">SDNU</span>
+              <span class="tl-tag">China</span>
+              <span class="tl-tag">Missão Técnica</span>
+              <span class="tl-tag">SIG &amp; Clima</span>
+              <span class="tl-tag">Cooperação Científica</span>
+            </div>
+            <div class="tl-foto-hint">📷 Sugestão: foto da delegação UEPA na entrada da SDNU (disponível no relatório) e foto interna da reunião com pesquisadores chineses.</div>
+          </div>
+        </div>
+
+        <!-- 5. ForestSAT 2026 -->
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="tl-date">Maio de 2026</span>
+              <span class="tl-pais">🇺🇸 Estados Unidos</span>
+            </div>
+            <h3>ForestSAT 2026 — Universidade da Flórida, Gainesville</h3>
+            <p>O PPGCA participou da edição 2026 do ForestSAT, um dos principais eventos mundiais sobre sensoriamento remoto aplicado a florestas, realizado entre os dias 5 e 7 de maio na Universidade da Flórida (Gainesville, EUA). O congresso reuniu centenas de pesquisadores de todo o mundo e abordou temas como LiDAR orbital e aerotransportado, estimativa de biomassa florestal, monitoramento de perturbações, inteligência artificial aplicada ao inventário florestal e missões espaciais de nova geração (GEDI, BIOMASS, ICESat-2, NISAR).</p>
+            <p>A Profa. Dra. Norma Beltrão e o doutorando Caio Brito apresentaram dois trabalhos científicos na modalidade pôster presencial, com pesquisas desenvolvidas integralmente no âmbito do PPGCA/UEPA:</p>
+            <div class="poster-grid">
+              <div class="poster-item">
+                <h4>Forest Biomass Modelling with GEDI and Sentinel-2 Data: A Comparison Between Ensemble Algorithms and Convolutional Neural Networks</h4>
+                <p><strong>Norma Ey Beltrao</strong> — University of Para State, Brazil. O estudo integra dados estruturais do LiDAR orbital GEDI e informações espectrais do Sentinel-2 para estimar a biomassa florestal na Reserva Extrativista Arióca Pruanã (Pará, Amazônia Oriental), comparando algoritmos de aprendizado de máquina (RF, XGBoost, LightGBM) e redes neurais convolucionais.</p>
+              </div>
+              <div class="poster-item">
+                <h4>Validation of GEDI Lidar Biomass Estimates in Dense Tropical Forests of Eastern Amazonia</h4>
+                <p><strong>Caio Brito, Norma Ey Beltrao</strong> — University of Para State, Brazil. Primeiro estudo detalhado de validação dos produtos GEDI L4A e L4B em florestas densas do Leste da Amazônia, com base em inventário florestal de 21.241 árvores, estabelecendo um protocolo metodológico replicável para monitoramento de carbono florestal.</p>
+              </div>
+            </div>
+            <p style="margin-top:12px;">A participação no ForestSAT 2026 posicionou o PPGCA/UEPA no cenário internacional de pesquisa em sensoriamento remoto florestal, possibilitando o contato direto com grupos de pesquisa de destaque mundial e a divulgação de resultados originais sobre a floresta amazônica para a comunidade científica global.</p>
+            <div class="tl-destaques">
+              <span class="tl-tag">ForestSAT 2026</span>
+              <span class="tl-tag">GEDI / LiDAR</span>
+              <span class="tl-tag">Biomassa Florestal</span>
+              <span class="tl-tag">Amazônia Oriental</span>
+              <span class="tl-tag">Machine Learning</span>
+            </div>
+            <div class="tl-foto-hint">📷 Sugestão: foto dos pôsteres apresentados no evento e/ou da delegação do PPGCA no campus da Universidade da Flórida.</div>
+          </div>
+        </div>
+
+      </div><!-- /timeline -->
+
+      <!-- Banner de números -->
+      <div class="stats-banner">
+        <div class="stat-banner-item">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          <div class="n">4</div>
+          <div class="l">Países visitados</div>
+        </div>
+        <div class="stat-banner-item">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          <div class="n">5</div>
+          <div class="l">Ações internacionais</div>
+        </div>
+        <div class="stat-banner-item">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div class="n">6</div>
+          <div class="l">Trabalhos apresentados</div>
+        </div>
+        <div class="stat-banner-item">
+          <svg viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3m-4 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          <div class="n">1</div>
+          <div class="l">Bolsa sanduíche CAPES</div>
+        </div>
+      </div>
+
+    </div><!-- /internacional -->
+
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script>const PAGINA_ATIVA = 'cooperacao';</script>
+<script>
+function toggleEvento(btn) {
+  const card = btn.closest('.evento-card');
+  const full = card.querySelector('.evento-card-full');
+  const resumo = card.querySelector('.evento-card-resumo');
+  const aberto = full.style.display === 'block';
+  full.style.display = aberto ? 'none' : 'block';
+  resumo.style.display = aberto ? '' : 'none';
+  btn.classList.toggle('aberto', !aberto);
+  btn.childNodes[0].textContent = aberto ? 'Saiba mais' : 'Ver menos';
+}
+</script>
+<script src="ppgca-components.js"></script>
+</body>
+</html>
